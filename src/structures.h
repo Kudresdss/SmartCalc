@@ -1,27 +1,39 @@
 #ifndef SMARTCALC1_STRUCTURES_H
 #define SMARTCALC1_STRUCTURES_H
 
+#include <algorithm>
+#include <initializer_list>
 #include <string>
-
-using namespace std {
+#include <vector>
+#include <stack>
 
 struct Node {
-    string  name = "";
+    std::string  name = "";
+
     int     priority = 0;
     double  value = 0;
 };
 
 struct ViewInfo {
-    string input_str = "";
-    string x_param = "1";
+    std::string input_str = "";
+    std::string x_string_value = "1";
+
+    unsigned int scale = 1000;
+    double x_max = 10;
+    double x_min = -10;
+    double y_max = 10;
+    double y_min = -10;
 };
 
 struct ModelInfo {
-    string label = "";
-    double result = 0;
-    double x_result = 0;
-};
+    std::string label = "";
+    std::vector<std::vector<double>> x_coord = {};
+    std::vector<std::vector<double>> y_coord = {};
 
-}  // namespace std
+    bool graph_mode = 0;
+    double result = 0;
+//    double x_result = 0;
+    double y_result = 0;
+};
 
 #endif //SMARTCALC1_STRUCTURES_H

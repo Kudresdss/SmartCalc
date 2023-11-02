@@ -11,11 +11,11 @@ class Controller : public QObject {
     Q_OBJECT
 
 public:
-    explicit Controller(Model *model, View *view);
+    explicit Controller(View *View, Model *Model);
 
 private:
-    Model   *model_;
-    View    *view_;
+    Model   *Model_;
+    View    *View_;
 };
 
 }  // namespace s21

@@ -17,16 +17,27 @@ namespace s21 {
 class View : public QMainWindow {
     Q_OBJECT
 
-signals:
-
 public:
-    View(QWidget *parent = nullptr);
+    explicit View(QWidget *parent = nullptr);
     ~View();
 
-private:
-    Ui::View *ui_;
+    void setTheme();
+    void buildGraph(const ModelInfo& model_info);
+
+public slots:
+    void slotModelToSmart(ModelInfo& model_info);
 
 private slots:
+    void slotSmartOnClick();
+
+signals:
+    void signalSmartToModel(ViewInfo& view_info);
+
+private:
+    void connectAll();
+    void setupSmartView(const ModelInfo& model_info);
+
+    Ui::View *ui;
 };
 
 }  // namespace s21
