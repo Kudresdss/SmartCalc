@@ -54,12 +54,12 @@ void Model::startSmartCalc(const ViewInfo& view_info, ModelInfo& model_info) {
 
     } catch (const std::exception& error) {
         string error_str = "Runtime error: ";
-        model_info.label = error_str + error.what();
+        model_info.error = error_str + error.what();
     }
 }
 
 void Model::manageInputString(const ViewInfo& view_info) {
-    string str = view_info.input_str;
+    string str = view_info.input_string;
 
     str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
     if (input_str_ != str) {
@@ -159,7 +159,7 @@ void Model::givePriorityValue(Node& token) {
     } else {
         token.priority = priority_map_[token.name];
         if (token.name == "e") token.value = std::exp(1.0);
-        else if (token.name == "pi") token.value = std::acos(-1.0);
+        else if (token.name == "π") token.value = std::acos(-1.0);
     }
 }
 
@@ -250,8 +250,8 @@ void Model::checkTokensLoop(vector_node& tokens, const Node& multiply, const Nod
                 func_token_insert_multiply(1);
             } else if (tokens[i].name == "(" && tokens[i + 1].name == "+") {
                 tokens.erase(begin + i + 1);
-            } else if (tokens[i].priority == -1 && tokens[i + 1].priority == -1) {
-                handleRuntimeExceptions("invalid expression: two consecutive numbers without a binary operator");
+//          } else if (tokens[i].priority == -1 && tokens[i + 1].priority == -1) {
+//                handleRuntimeExceptions("invalid expression: two consecutive numbers without a binary operator");
             } else if (tokens[i].name == "(" && tokens[i + 1].name == ")") {
                 handleRuntimeExceptions("incorrect usage of brackets: empty brackets");
             } else if (checkTokenIdentity(tokens[i]) == "binary function" &&
@@ -356,7 +356,7 @@ void Model::calculateXGraph(const ViewInfo& view_info, ModelInfo& model_info) {
         m.y_coord.push_back(y_temp);
     };
 
-    for (double x_val = v.x_min; x_val < v.x_max; x_val += (v.x_max - v.x_min) / v.scale) {
+    for (double x_val = v.x_min; x_val < v.x_max; x_val += (v.x_max - v.x_min) / v.points_density) {
         for (Node& x_token : x_tokens) {
             if (x_token.name == "x") {
                 x_token.value = x_val;
@@ -418,7 +418,7 @@ void Model::evaluatePostfixNotation(ModelInfo& model_info, const vector_node& to
                     if (right_operand <= 0)
                         handleRuntimeExceptions("invalid expression: log of a number ∈ (-∞;0]");
                     result = std::log10(right_operand); }
-                else if (token_iter.name == "sqrt") {
+                else if (token_iter.name == "√") {
                     if (right_operand < 0)
                         handleRuntimeExceptions("invalid expression: square root of a negative number");
                     result = std::sqrt(right_operand);

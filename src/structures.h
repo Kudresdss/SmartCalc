@@ -8,17 +8,17 @@
 #include <stack>
 
 struct Node {
-    std::string  name = "";
+    std::string  name;
 
     int     priority = 0;
     double  value = 0;
 };
 
 struct ViewInfo {
-    std::string input_str = "";
+    std::string input_string;
     std::string x_string_value = "1";
 
-    unsigned int scale = 1000;
+    unsigned int points_density = 1000;
     double x_max = 10;
     double x_min = -10;
     double y_max = 10;
@@ -26,7 +26,8 @@ struct ViewInfo {
 };
 
 struct ModelInfo {
-    std::string label = "";
+    std::string label;
+    std::string error;
     std::vector<std::vector<double>> x_coord = {};
     std::vector<std::vector<double>> y_coord = {};
 

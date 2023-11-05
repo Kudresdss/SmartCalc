@@ -28,16 +28,29 @@ public slots:
     void slotModelToSmart(ModelInfo& model_info);
 
 private slots:
-    void slotSmartOnClick();
+    void startSmartCalculator_SignalToModel();
+    void printInLineEdit();
+    void toggleNotationLable();
+
+    void on_actionOpen_project_triggered();
+    void on_actionOpen_project_2_triggered();
+    void on_actionOpen_project_3_triggered();
 
 signals:
     void signalSmartToModel(ViewInfo& view_info);
 
 private:
+    void startSmartCalculator_SignalFromModel(const ModelInfo& model_info);
     void connectAll();
-    void setupSmartView(const ModelInfo& model_info);
 
+    bool toggle_notation_ = false;
     Ui::View *ui;
+    ModelInfo model_info_;
+    std::vector<QString> generic_tokens_ = {".", "0", "1", "2", "3", "4", "5", "6", "7", "8",
+                                               "9", "+", "-", "×", "÷", "(", ")"};
+    std::vector<QString> bracket_tokens_ = {"^", "√", "ln", "log", "mod", "sin", "asin",
+                                            "cos", "acos", "tan", "atan"};
+    std::vector<QString> special_tokens_ = {"X", "e", "π", "AC", "←"};
 };
 
 }  // namespace s21
