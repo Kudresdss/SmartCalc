@@ -2,6 +2,7 @@
 #define VIEW_H
 
 #include <QMainWindow>
+#include <QButtonGroup>
 #include <QEvent>
 #include <QObject>
 #include <QPalette>
@@ -29,7 +30,7 @@ public slots:
 
 private slots:
     void startSmartCalculator_SignalToModel();
-    void printInLineEdit();
+    void printInLineEdit(QAbstractButton* button_pressed);
     void toggleNotationLable();
 
     void on_actionOpen_project_triggered();

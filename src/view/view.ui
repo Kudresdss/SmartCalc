@@ -263,6 +263,9 @@ width: 18px;
             <property name="text">
              <string>tan</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="11" column="0">
@@ -314,6 +317,9 @@ width: 18px;
             <property name="text">
              <string>2</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="4" column="4" rowspan="2">
@@ -339,6 +345,9 @@ width: 18px;
             <property name="text">
              <string>÷</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="4" column="5" rowspan="2">
@@ -364,6 +373,9 @@ width: 18px;
             <property name="text">
              <string>√</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="6" column="0" rowspan="2">
@@ -386,9 +398,18 @@ width: 18px;
               <height>40</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>18</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>e</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="2" column="3" rowspan="2">
@@ -414,6 +435,9 @@ width: 18px;
             <property name="text">
              <string>9</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="8" column="3" rowspan="2">
@@ -436,9 +460,18 @@ width: 18px;
               <height>40</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>20</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>.</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="0" column="8" rowspan="2">
@@ -460,6 +493,12 @@ width: 18px;
               <width>40</width>
               <height>40</height>
              </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>20</pointsize>
+             </font>
             </property>
             <property name="styleSheet">
              <string notr="true"/>
@@ -492,6 +531,9 @@ width: 18px;
             <property name="text">
              <string>asin</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="12" column="1" colspan="3">
@@ -516,6 +558,9 @@ width: 18px;
             </property>
             <property name="layoutDirection">
              <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="maxLength">
+             <number>255</number>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -545,6 +590,9 @@ width: 18px;
             <property name="text">
              <string>atan</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="2" column="6" rowspan="2">
@@ -570,6 +618,9 @@ width: 18px;
             <property name="text">
              <string>(</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="6" column="5" rowspan="2">
@@ -595,6 +646,9 @@ width: 18px;
             <property name="text">
              <string>mod</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="2" column="2" rowspan="2">
@@ -620,6 +674,9 @@ width: 18px;
             <property name="text">
              <string>8</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="2" column="1" rowspan="2">
@@ -645,6 +702,9 @@ width: 18px;
             <property name="text">
              <string>7</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="4" column="0" rowspan="2">
@@ -667,9 +727,18 @@ width: 18px;
               <height>40</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>18</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>π</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="8" column="4" rowspan="2">
@@ -695,6 +764,9 @@ width: 18px;
             <property name="text">
              <string>+</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="4" column="1" rowspan="2">
@@ -720,6 +792,9 @@ width: 18px;
             <property name="text">
              <string>4</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="6" column="7" rowspan="2">
@@ -745,6 +820,9 @@ width: 18px;
             <property name="text">
              <string>acos</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="9" column="5">
@@ -773,6 +851,9 @@ width: 18px;
             <property name="text">
              <string>log</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="4" column="2" rowspan="2">
@@ -798,6 +879,9 @@ width: 18px;
             <property name="text">
              <string>5</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="8" column="1" rowspan="2" colspan="2">
@@ -826,6 +910,9 @@ width: 18px;
             <property name="text">
              <string>0</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="4" column="6" rowspan="2">
@@ -851,6 +938,9 @@ width: 18px;
             <property name="text">
              <string>sin</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="6" column="1" rowspan="2">
@@ -876,6 +966,9 @@ width: 18px;
             <property name="text">
              <string>1</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="2" column="0" rowspan="2">
@@ -898,9 +991,15 @@ width: 18px;
               <height>40</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>18</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-color: rgb(15, 195, 227);
+color: rgb(13, 170, 200);
 background-color: rgb(201, 201, 201);
 border-bottom: 3px solid rgb(128, 128, 128);
 border-left: 2px solid rgb(180, 180, 180);
@@ -911,7 +1010,7 @@ QPushButton:hover {
 background-color: rgb(15, 195, 227);
 border-bottom: 3px solid rgb(15, 110, 130);
 border-left: 2px solid rgb(15, 150, 180);
-color: rgb(255, 255, 255);
+color: rgb(62, 62, 62);
 border-radius: 4px;
 }
 
@@ -919,7 +1018,7 @@ QPushButton:pressed {
 background-color: rgb(13, 170, 200);
 border-bottom: 3px solid rgb(15, 90, 110);
 border-left: 2px solid rgb(15, 135, 165);
-color: rgb(255, 255, 255);
+color: rgb(62, 62, 62);
 border-radius: 4px;
 }
 
@@ -931,6 +1030,9 @@ border: 2px solid rgb(8, 150, 170);
             <property name="text">
              <string>AC</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="12" column="0">
@@ -1048,6 +1150,9 @@ border: 3px groove rgb(8, 150, 170);
             <property name="text">
              <string>ln</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="8" column="0" rowspan="2">
@@ -1070,9 +1175,18 @@ border: 3px groove rgb(8, 150, 170);
               <height>40</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>15</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>X</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="16" column="1">
@@ -1111,6 +1225,9 @@ border: 3px groove rgb(8, 150, 170);
             <property name="text">
              <string>^</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="14" column="1" colspan="7">
@@ -1143,6 +1260,9 @@ border: 3px groove rgb(8, 150, 170);
             <property name="text">
              <string>3</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="4" column="3" rowspan="2">
@@ -1168,6 +1288,9 @@ border: 3px groove rgb(8, 150, 170);
             <property name="text">
              <string>6</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="0" column="0" rowspan="2" colspan="8">
@@ -1189,6 +1312,9 @@ border: 3px groove rgb(8, 150, 170);
               <width>800</width>
               <height>40</height>
              </size>
+            </property>
+            <property name="maxLength">
+             <number>255</number>
             </property>
            </widget>
           </item>
@@ -1215,6 +1341,9 @@ border: 3px groove rgb(8, 150, 170);
             <property name="text">
              <string>×</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="6" column="6" rowspan="2">
@@ -1240,6 +1369,9 @@ border: 3px groove rgb(8, 150, 170);
             <property name="text">
              <string>cos</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="2" column="7" rowspan="2">
@@ -1265,6 +1397,9 @@ border: 3px groove rgb(8, 150, 170);
             <property name="text">
              <string>)</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="14" column="0">
@@ -1286,25 +1421,16 @@ border: 3px groove rgb(8, 150, 170);
 background-color: rgb(201, 201, 201);
 border-bottom: 3px solid rgb(128, 128, 128);
 border-left: 2px solid rgb(180, 180, 180);
-color: rgb(62, 62, 62);
 border-radius: 4px;
 }
 
 QPushButton:hover {
-background-color: rgb(13, 200, 200);
-border-bottom: 3px solid rgb(15, 90, 110);
-border-left: 2px solid rgb(15, 135, 165);
-color: rgb(255, 255, 255);
+background-color: rgb(201, 201, 201);
+border-bottom: 3px solid rgb(128, 128, 128);
+border-left: 2px solid rgb(180, 180, 180);
 border-radius: 4px;
 }
-
-QPushButton:pressed {
-background-color: rgb(13, 170, 170);
-border-bottom: 3px solid rgb(15, 90, 110);
-border-left: 2px solid rgb(15, 135, 165);
-color: rgb(255, 255, 255);
-border-radius: 4px;
-}</string>
+</string>
             </property>
             <property name="text">
              <string/>
@@ -1334,6 +1460,9 @@ border-radius: 4px;
             <property name="text">
              <string>-</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
           <item row="2" column="8" rowspan="4">
@@ -1356,9 +1485,21 @@ border-radius: 4px;
               <height>85</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>20</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="text">
              <string>←</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
            </widget>
           </item>
          </layout>
@@ -1381,6 +1522,7 @@ border-radius: 4px;
    </property>
    <property name="styleSheet">
     <string notr="true">QMenuBar {
+spacing: 3px;
 background-color: rgb(210, 210, 210);
 border-color: rgb(0, 247, 255);
 border-style: groove;
@@ -1399,9 +1541,7 @@ background-color: rgb(15, 195, 227);
 
 QMenu:selected {
 background-color: rgb(13, 170, 200);
-}
-
-</string>
+}</string>
    </property>
    <property name="defaultUp">
     <bool>true</bool>
@@ -1458,4 +1598,7 @@ background-color: rgb(13, 170, 200);
  </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup_print"/>
+ </buttongroups>
 </ui>

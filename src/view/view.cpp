@@ -7,11 +7,19 @@ View::View(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::View) {
     ui->setupUi(this);
     ui->menubar->setNativeMenuBar(false);
+    setlocale(LC_NUMERIC, "C");
+    setTheme();
     connectAll();
 }
 
 View::~View() {
     delete ui;
+}
+
+void View::setTheme() {
+    int font_id = QFontDatabase::addApplicationFont(":/fonts/LucidaGrande.ttc");
+    QString family = QFontDatabase::applicationFontFamilies(font_id).at(0);
+    QFont monospace(family);
 }
 
 void View::startSmartCalculator_SignalToModel() {
@@ -38,8 +46,8 @@ void View::startSmartCalculator_SignalFromModel(const ModelInfo& model_info) {
         ui->label_notation->setText(QString::fromStdString(model_info_.label));
 }
 
-void View::printInLineEdit() {
-    auto *button = (QPushButton *)sender();
+void View::printInLineEdit(QAbstractButton* button_pressed) {
+    auto button = (QPushButton *)button_pressed;
     qsizetype current_position = ui->lineEdit_input->cursorPosition();
     qsizetype new_position;
     QString current_text = ui->lineEdit_input->text();
@@ -109,44 +117,10 @@ void View::buildGraph(const ModelInfo& model_info) {
 }
 
 void View::connectAll() {
-
-    connect(ui->pushButton_dot, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_0, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_1, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_4, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_5, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_6, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_7, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_8, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_9, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_plus, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_minus, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_multiply, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_divide, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_left_bracket, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_right_bracket, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_exponentiation, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_square_root, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_ln, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_log10, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_modulus, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_sin, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_asin, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_cos, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_acos, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_tan, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_atan, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_x, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_e, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_pi, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_AC, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
-    connect(ui->pushButton_backspace, SIGNAL(clicked()), this, SLOT(printInLineEdit()));
+    connect(ui->buttonGroup_print, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(printInLineEdit(QAbstractButton*)));
 
     connect(ui->pushButton_equals, SIGNAL(clicked()), this, SLOT(startSmartCalculator_SignalToModel()));
     connect(ui->lineEdit_input, SIGNAL(returnPressed()), this, SLOT(startSmartCalculator_SignalToModel()));
-//    connect(ui->lineEdit_input, SIGNAL(textChanged(QString)), this, SLOT(startSmartCalculator_SignalFromModel()));
     connect(ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(startSmartCalculator_SignalToModel()));
     connect(ui->verticalSlider_graph, SIGNAL(sliderMoved(int)), this, SLOT(startSmartCalculator_SignalToModel()));
 
@@ -155,10 +129,20 @@ void View::connectAll() {
 
 void View::toggleNotationLable() {
     toggle_notation_ = !toggle_notation_;
-    if (toggle_notation_)
+    if (toggle_notation_) {
         ui->label_notation->setText(QString::fromStdString(model_info_.label));
-    else
+        ui->pushButton_notation->setStyleSheet("background-color: rgb(13, 170, 170);"
+                                               "border-bottom: 3px solid rgb(15, 90, 110);"
+                                               "border-left: 2px solid rgb(15, 135, 165);"
+                                               "border-radius: 4px;");
+    }
+    else {
         ui->label_notation->setText("");
+        ui->pushButton_notation->setStyleSheet("background-color: rgb(201, 201, 201);"
+                                               "border-bottom: 3px solid rgb(128, 128, 128);"
+                                               "border-left: 2px solid rgb(180, 180, 180);"
+                                               "border-radius: 4px;");
+    }
 }
 
 void View::slotModelToSmart(ModelInfo& model_info){

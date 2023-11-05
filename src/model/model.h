@@ -1,13 +1,11 @@
 #ifndef SMARTCALC1_MODEL_H
 #define SMARTCALC1_MODEL_H
 
-#include <clocale>
 #include <QObject>
 #include "../structures.h"
 
 namespace s21 {
 
-// Класс модели сделан singleton'ом, так как может существовать только одна модель.
 class Model : public QObject {
     Q_OBJECT
 
@@ -21,8 +19,6 @@ public:
     string getStatus();
 //    void getModelInfoSmartCalc(const string input_string, const string x_string_value);
 
-    //Конструктор и оператор копирования удалены, так как экземпляр класса статический.
-    //Конструктор и оператор перемещения не создаются неявно, так как все, что связано с копированием объявлено вручную.
     Model(Model const&) = delete;
     Model& operator=(Model const&) = delete;
 
@@ -33,7 +29,6 @@ signals:
     void signalModelToSmart(ModelInfo& model_info);
 
 private:
-    //Приватный конструктор и деструктор, так как их нельзя давать создавать.
     Model() = default;
     ~Model() = default;
 

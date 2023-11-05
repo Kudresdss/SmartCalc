@@ -11,24 +11,10 @@ double Model::getResult() { return result_; }
 
 std::string Model::getStatus() { return output_status_; }
 
-//void Model::getModelInfoSmartCalc(const string input_string, const string x_string_value) {
-//    ViewInfo view_info;
-//    ModelInfo model_info;
-//
-//    setlocale(LC_NUMERIC, "C");
-//
-//    view_info.input_str = input_string;
-//    view_info.x_string_value = x_string_value;
-//
-//    startSmartCalc(view_info, model_info);
-//}
-
 void Model::slotSmartToModel(const ViewInfo& view_info) {
     ModelInfo model_info;
 
-    setlocale(LC_NUMERIC, "C");
     startSmartCalc(view_info, model_info);
-
     emit signalModelToSmart(model_info);
 }
 
@@ -107,20 +93,6 @@ void Model::makeFunctionTokens(vector_node& tokens, Node& current_token, const s
         }
     }
     if (error) handleRuntimeExceptions("invalid expression: unknown token");
-
-
-//    if (i < size - 1 && str.substr(i, 2) == "pi") buildTokens(tokens, current_token, i, "pi");
-//    else if (i < size - 1 && str.substr(i, 2) == "ln") buildTokens(tokens, current_token, i, "ln");
-//    else if (i < size - 2 && str.substr(i, 3) == "mod") buildTokens(tokens, current_token, i, "mod");
-//    else if (i < size - 2 && str.substr(i, 3) == "log") buildTokens(tokens, current_token, i, "log");
-//    else if (i < size - 2 && str.substr(i, 3) == "sin") buildTokens(tokens, current_token, i, "sin");
-//    else if (i < size - 2 && str.substr(i, 3) == "cos") buildTokens(tokens, current_token, i, "cos");
-//    else if (i < size - 2 && str.substr(i, 3) == "tan") buildTokens(tokens, current_token, i, "tan");
-//    else if (i < size - 3 && str.substr(i, 4) == "asin") buildTokens(tokens, current_token, i, "asin");
-//    else if (i < size - 3 && str.substr(i, 4) == "acos") buildTokens(tokens, current_token, i, "acos");
-//    else if (i < size - 3 && str.substr(i, 4) == "atan") buildTokens(tokens, current_token, i, "atan");
-//    else if (i < size - 3 && str.substr(i, 4) == "sqrt") buildTokens(tokens, current_token, i, "sqrt");
-//    else throw std::runtime_error("makeTokens(): unknown token");
 }
 
 std::string Model::makeNumString(const string& str, size_t& index) noexcept {
@@ -263,42 +235,6 @@ void Model::checkTokensLoop(vector_node& tokens, const Node& multiply, const Nod
             }
         }
     }
-
-//    for (size_t i = 0; i < tokens.size(); ++i) {
-//        if (i + 1 < tokens.size()) {
-//            if (tokens[i].name == "x" && tokens[i + 1].name == "x") {
-//                tokens.insert(begin + i + 1, mult);
-//                ++i;
-//            } else if (tokens[i].priority == -1 &&
-//                       (tokens[i + 1].name == "x" || tokens[i + 1].name == "(")) {
-//                tokens.insert(begin + i + 1, mult);
-//                ++i;
-//            } else if (tokens[i].priority == -1 && tokens[i + 1].priority == -1) {
-//                handleRuntimeExceptions("two numbers side by side without a binary operator");
-//            } else if (tokens[i].name == "(" && tokens[i + 1] == ")") {
-//                handleRuntimeExceptions("empty brackets");
-//            } else if ((tokens[i].priority == -1 || tokens[i].name == ")") &&
-//                       checkTokenIdentity(tokens[i + 1]) == "unary function") {
-//                tokens.insert(begin + i + 1, mult);
-//                ++i;
-//            } else if (tokens[i].name == ")" && tokens[i + 1].name == "(") {
-//                tokens.insert(begin + i + 1, mult);
-//                ++i;
-//            } else if (tokens[i].name == "(" && tokens[i + 1].name == "-") {
-//                tokens[i + 1] = minus_one;
-//                tokens.insert(begin + i + 2, mult);
-//                ++i;
-//            } else if (tokens[i].name == "(" && tokens[i + 1].name == "+") {
-//                tokens.erase(begin + i + 1);
-//            } else if (checkTokenIdentity(tokens[i]) == "binary function" &&
-//                       checkTokenIdentity(tokens[i + 1) == "binary function") {
-//                handleRuntimeExceptions("incorrect usage of binary functions");
-//            } else if (checkTokenIdentity(tokens[i]) == "unary function" &&
-//                       checkTokenIdentity(tokens[i + 1) == "binary function") {
-//                handleRuntimeExceptions("incorrect usage of unary functions");
-//            }
-//        }
-//    }
 }
 
 std::string Model::checkTokenIdentity(const Node& token) noexcept {

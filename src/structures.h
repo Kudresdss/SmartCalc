@@ -1,6 +1,7 @@
 #ifndef SMARTCALC1_STRUCTURES_H
 #define SMARTCALC1_STRUCTURES_H
 
+#include <clocale>
 #include <algorithm>
 #include <initializer_list>
 #include <string>
