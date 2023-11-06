@@ -1,13 +1,19 @@
 #ifndef VIEW_H
 #define VIEW_H
 
+#include <QObject>
 #include <QMainWindow>
+#include <QWidget>
+#include <QLabel>
 #include <QButtonGroup>
 #include <QEvent>
-#include <QObject>
+#include <QPaintEvent>
+#include <QPainter>
 #include <QPalette>
-#include <QWidget>
+#include <QRect>
+#include <QRegion>
 #include "../structures.h"
+#include "qlabelhorizontal.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
@@ -23,7 +29,7 @@ public:
     ~View();
 
     void setTheme();
-    void buildGraph(const ModelInfo& model_info);
+    void buildGraph();
 
 public slots:
     void slotModelToSmart(ModelInfo& model_info);
@@ -41,7 +47,7 @@ signals:
     void signalSmartToModel(ViewInfo& view_info);
 
 private:
-    void startSmartCalculator_SignalFromModel(const ModelInfo& model_info);
+    void startSmartCalculator_SignalFromModel();
     void connectAll();
 
     bool toggle_notation_ = false;

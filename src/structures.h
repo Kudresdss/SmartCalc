@@ -11,8 +11,8 @@
 struct Node {
     std::string  name;
 
-    int     priority = 0;
-    double  value = 0;
+    int priority = 0;
+    double value = 0;
 };
 
 struct ViewInfo {
@@ -34,7 +34,6 @@ struct ModelInfo {
 
     bool graph_mode = 0;
     double result = 0;
-//    double x_result = 0;
     double y_result = 0;
 };
 

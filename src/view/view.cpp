@@ -35,13 +35,13 @@ void View::startSmartCalculator_SignalToModel() {
     emit signalSmartToModel(view_info);
 }
 
-void View::startSmartCalculator_SignalFromModel(const ModelInfo& model_info) {
+void View::startSmartCalculator_SignalFromModel() {
     ui->customPlot->clearGraphs();
     ui->customPlot->replot();
-    ui->statusbar->showMessage(tr(model_info.error.c_str()));
-    ui->label_result->setText(QString::number(model_info.result, 'f', 5));
-    if (model_info.graph_mode)
-        buildGraph(model_info);
+    ui->statusbar->showMessage(tr(model_info_.error.c_str()));
+    ui->label_result->setText(QString::number(model_info_.result, 'f', 5));
+    if (model_info_.graph_mode)
+        buildGraph();
     if (toggle_notation_)
         ui->label_notation->setText(QString::fromStdString(model_info_.label));
 }
@@ -112,8 +112,26 @@ void View::printInLineEdit(QAbstractButton* button_pressed) {
     ui->lineEdit_input->setCursorPosition(new_position);
 }
 
-void View::buildGraph(const ModelInfo& model_info) {
+void View::buildGraph() {
+    QPen pen;
+    size_t max_size = model_info_.x_coord.size();
 
+    for (size_t i = 0; i < max_size; ++i) {
+        QVector<double> x, y;
+        for (size_t j = 0; j < model_info_.x_coord[i].size(); ++j) {
+            x.push_back(model_info_.x_coord[i][j]);
+            y.push_back(model_info_.y_coord[i][j]);
+        }
+        if ((!(x.empty() || y.empty())) && model_info_.error.empty()) {
+            pen.setColor(QColor(QColorConstants::Black));
+            pen.setWidth(2);
+            ui->customPlot->addGraph();
+            ui->customPlot->graph(i)->addData(x, y);
+            ui->customPlot->graph(i)->setPen(pen);
+            ui->customPlot->graph(i)->setLineStyle(QCPGraph::lsLine);
+            ui->customPlot->replot();
+        }
+    }
 }
 
 void View::connectAll() {
@@ -147,7 +165,7 @@ void View::toggleNotationLable() {
 
 void View::slotModelToSmart(ModelInfo& model_info){
     model_info_ = model_info;
-    startSmartCalculator_SignalFromModel(model_info);
+    startSmartCalculator_SignalFromModel();
 }
 
 void View::on_actionOpen_project_triggered()
