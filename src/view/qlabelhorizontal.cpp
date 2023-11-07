@@ -1,6 +1,8 @@
 #include "qlabelhorizontal.h"
 
-QLabelHorizontal::QLabelHorizontal(QWidget* parent) : QLabel(parent) {}
+namespace s21 {
+
+QLabelHorizontal::QLabelHorizontal(QWidget *parent) : QLabel(parent) {}
 
 void QLabelHorizontal::paintEvent(QPaintEvent *paint_event) {
     QPainter painter = QPainter(this);
@@ -9,3 +11,5 @@ void QLabelHorizontal::paintEvent(QPaintEvent *paint_event) {
     painter.drawText(paint_event->rect(), this->text());
     painter.restore();
 }
+
+}  // namespace s21

@@ -9,7 +9,13 @@ View::View(QWidget *parent)
     ui->menubar->setNativeMenuBar(false);
     setlocale(LC_NUMERIC, "C");
     setTheme();
+
+    line_edit_filter_ = new LineEditClickFilter();
+    ui->lineEdit_input->installEventFilter(line_edit_filter_);
+    ui->lineEdit_x->installEventFilter(line_edit_filter_);
+
     connectAll();
+    ui->lineEdit_input->setFocus();
 }
 
 View::~View() {
@@ -28,10 +34,10 @@ void View::startSmartCalculator_SignalToModel() {
     view_info.input_string = ui->lineEdit_input->text().toStdString();
     view_info.points_density = ui->verticalSlider_graph->sliderPosition();
     view_info.x_string_value = ui->lineEdit_x->text().toStdString();
-    view_info.x_max = ui->customPlot->xAxis->range().upper;
-    view_info.x_min = ui->customPlot->xAxis->range().lower;
-    view_info.y_max = ui->customPlot->yAxis->range().upper;
-    view_info.y_min = ui->customPlot->yAxis->range().lower;
+    view_info.x_max = ui->lineEdit_x_max->text().toDouble();
+    view_info.x_min = ui->lineEdit_x_min->text().toDouble();
+    view_info.y_max = ui->lineEdit_y_max->text().toDouble();
+    view_info.y_min = ui->lineEdit_x_min->text().toDouble();
     emit signalSmartToModel(view_info);
 }
 
@@ -48,12 +54,21 @@ void View::startSmartCalculator_SignalFromModel() {
 
 void View::printInLineEdit(QAbstractButton* button_pressed) {
     auto button = (QPushButton *)button_pressed;
-    qsizetype current_position = ui->lineEdit_input->cursorPosition();
     qsizetype new_position;
-    QString current_text = ui->lineEdit_input->text();
+    QLineEdit *line_edit;
     QString key_pressed = button->text();
     QString input_text;
     QString text_result;
+
+    if (line_edit_index_ == 1)
+        line_edit = ui->lineEdit_input;
+    else if (line_edit_index_ == 2)
+        line_edit = ui->lineEdit_x;
+    else
+        line_edit = ui->lineEdit_input;
+
+    qsizetype current_position = line_edit->cursorPosition();
+    QString current_text = line_edit->text();
 
     auto func_determine_key_type = [this, key_pressed] () -> int {
         for (QString& generic_key : generic_tokens_) {
@@ -88,11 +103,11 @@ void View::printInLineEdit(QAbstractButton* button_pressed) {
         if (key_pressed == "X")
             input_text = "x";
         else if (key_pressed == "AC") {
-            ui->lineEdit_input->setText("");
+            line_edit->setText("");
             return;
         }
         else if (key_pressed == "←") {
-            ui->lineEdit_input->backspace();
+            line_edit->backspace();
             return;
         }
         else
@@ -102,14 +117,14 @@ void View::printInLineEdit(QAbstractButton* button_pressed) {
     if (current_position < 0) current_position = current_text.length();
 
     text_result = current_text.insert(current_position, input_text);
-    ui->lineEdit_input->setText(text_result);
-    ui->lineEdit_input->setFocus();
+    line_edit->setText(text_result);
+    line_edit->setFocus();
 
     if (key_type == 2)
         new_position = current_position + input_text.length() - 1;
     else
         new_position = current_position + input_text.length();
-    ui->lineEdit_input->setCursorPosition(new_position);
+    line_edit->setCursorPosition(new_position);
 }
 
 void View::buildGraph() {
@@ -128,7 +143,6 @@ void View::buildGraph() {
             ui->customPlot->addGraph();
             ui->customPlot->graph(i)->addData(x, y);
             ui->customPlot->graph(i)->setPen(pen);
-            ui->customPlot->graph(i)->setLineStyle(QCPGraph::lsLine);
             ui->customPlot->replot();
         }
     }
@@ -139,6 +153,13 @@ void View::connectAll() {
 
     connect(ui->pushButton_equals, SIGNAL(clicked()), this, SLOT(startSmartCalculator_SignalToModel()));
     connect(ui->lineEdit_input, SIGNAL(returnPressed()), this, SLOT(startSmartCalculator_SignalToModel()));
+
+    connect(line_edit_filter_, &LineEditClickFilter::signalLineEdit_Input, this, [this]() {line_edit_index_=1;});
+    connect(line_edit_filter_, &LineEditClickFilter::signalLineEdit_X, this, [this]() {line_edit_index_=2;});
+
+    connect(ui->lineEdit_input, &QLineEdit::textChanged, this, [this]() {line_edit_index_=1;});
+    connect(ui->lineEdit_x, &QLineEdit::textChanged, this, [this]() {line_edit_index_=2;});
+
     connect(ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(startSmartCalculator_SignalToModel()));
     connect(ui->verticalSlider_graph, SIGNAL(sliderMoved(int)), this, SLOT(startSmartCalculator_SignalToModel()));
 

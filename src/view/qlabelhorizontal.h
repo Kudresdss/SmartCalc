@@ -3,6 +3,8 @@
 
 #include "view.h"
 
+namespace s21 {
+
 class QLabelHorizontal : public QLabel {
 Q_OBJECT
 
@@ -13,5 +15,7 @@ public:
 protected:
     void paintEvent(QPaintEvent *paint_event) override;
 };
+
+}  // namespace s21
 
 #endif //SMARTCALC1_QLABELHORIZONTAL_H

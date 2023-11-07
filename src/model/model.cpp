@@ -315,7 +315,6 @@ void Model::calculateXGraph(const ViewInfo& view_info, ModelInfo& model_info) {
         }
     }
     if (!x_temp.empty()) func_push_x_y_temp();
-    m.label = "graph";
     m.graph_mode = true;
 }
 
