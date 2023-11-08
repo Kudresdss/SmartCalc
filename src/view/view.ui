@@ -828,13 +828,6 @@ border: 3px groove rgb(8, 150, 170);
             </attribute>
            </widget>
           </item>
-          <item row="14" column="1" colspan="7">
-           <widget class="QLabel" name="label_notation">
-            <property name="text">
-             <string>  Show postfix notation</string>
-            </property>
-           </widget>
-          </item>
           <item row="8" column="7" rowspan="2">
            <widget class="QPushButton" name="pushButton_atan">
             <property name="sizePolicy">
@@ -1394,6 +1387,31 @@ border: 2px solid rgb(8, 150, 170);
             <attribute name="buttonGroup">
              <string notr="true">buttonGroup_print</string>
             </attribute>
+           </widget>
+          </item>
+          <item row="14" column="1" colspan="8">
+           <widget class="QLabel" name="label_notation">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>390</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>390</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>  Show postfix notation</string>
+            </property>
            </widget>
           </item>
          </layout>

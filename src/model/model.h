@@ -38,7 +38,7 @@ private:
     void makeFunctionTokens(vector_node& tokens, Node& current_token, const string& token_str, size_t& index);
     string makeNumString(const string& str, size_t &index) noexcept;
     bool checkNormalizedNum(const string& str, size_t &index) noexcept;
-    void givePriorityValue(Node& token);
+    void givePriorityAndValue(Node& token);
     void checkMultipleDots(const string& token_name);
     void cleanToken(Node& token) noexcept;
     void buildTokens(vector_node& tokens, Node& current_token, const string& sub_token, size_t& index);
@@ -47,7 +47,7 @@ private:
     string checkTokenIdentity(const Node& token) noexcept;
     void rearrangeIntoPostfixNotation(const vector_node& tokens) noexcept;
     void calculateXGraph(const ViewInfo& view_info, ModelInfo& model_info);
-    void evaluatePostfixNotation(ModelInfo& model_info, const vector_node& tokens);
+    double evaluatePostfixNotation(ModelInfo& model_info, const vector_node& tokens);
     void evaluatePostfixNotationForX(const ViewInfo& view_info, ModelInfo& model_info);
     void turnTokensToLabel(ModelInfo& model_info, const vector_node& tokens) noexcept;
     void handleRuntimeExceptions(const string& exception);
@@ -58,7 +58,7 @@ private:
     bool   error_ = false;
     bool   new_str_ = false;
     bool   graph_mode_ = false;
-    bool   evaluate_y_mode_ = false;
+    bool   x_string_calculate_ = false;
     vector_node tokens_ = {};
     std::vector<char> functional_tokens_ = {'+', '-', '*', '/', '^', '(', ')', 'e', 'x'};
     std::vector<string> functions_ = {"π", "ln", "mod", "log", "sin", "cos", "tan", "asin", "acos", "atan", "√"};

@@ -33,7 +33,7 @@ void View::startSmartCalculator_SignalToModel() {
 
     view_info.input_string = ui->lineEdit_input->text().toStdString();
     view_info.points_density = ui->verticalSlider_graph->sliderPosition();
-    view_info.x_string_value = ui->lineEdit_x->text().toStdString();
+    view_info.x_string = ui->lineEdit_x->text().toStdString();
     view_info.x_max = ui->lineEdit_x_max->text().toDouble();
     view_info.x_min = ui->lineEdit_x_min->text().toDouble();
     view_info.y_max = ui->lineEdit_y_max->text().toDouble();

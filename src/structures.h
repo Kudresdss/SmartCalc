@@ -17,7 +17,7 @@ struct Node {
 
 struct ViewInfo {
     std::string input_string;
-    std::string x_string_value = "1";
+    std::string x_string = "0";
 
     unsigned int points_density = 1000;
     double x_max = 10;

@@ -28,16 +28,16 @@ void Model::startSmartCalc(const ViewInfo& view_info, ModelInfo& model_info) {
             checkTokens(tokens);
             rearrangeIntoPostfixNotation(tokens);
         }
-        if (graph_mode_) {
+        if (graph_mode_ && !x_string_calculate_) {
             calculateXGraph(view_info, model_info);
             evaluatePostfixNotationForX(view_info, model_info);
-        } else {
-            evaluatePostfixNotation(model_info, tokens_);
+        } else
+            model_info.result = evaluatePostfixNotation(model_info, tokens_);
+        if (!x_string_calculate_) {
             turnTokensToLabel(model_info, tokens_);
+            result_ = model_info.result;
+            output_status_ = model_info.label;
         }
-        result_ = model_info.result;
-        output_status_ = model_info.label;
-
     } catch (const std::exception& error) {
         string error_str = "Runtime error: ";
         model_info.error = error_str + error.what();
@@ -45,10 +45,15 @@ void Model::startSmartCalc(const ViewInfo& view_info, ModelInfo& model_info) {
 }
 
 void Model::manageInputString(const ViewInfo& view_info) {
-    string str = view_info.input_string;
+    string str;
+
+    if (!x_string_calculate_)
+        str = view_info.input_string;
+    else
+        str = view_info.x_string;
 
     str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
-    if (input_str_ != str) {
+    if (input_str_ != str || x_string_calculate_) {
         input_str_ = str;
         new_str_ = true;
     }
@@ -66,13 +71,18 @@ void Model::makeTokens(vector_node& tokens) {
             string num_str = makeNumString(str, i);
             current_token.name = num_str;
             current_token.priority = -1;
-            givePriorityValue(current_token);
+            givePriorityAndValue(current_token);
             tokens.push_back(current_token);
         } else {
             if (!current_token.name.empty()) cleanToken(current_token);
             if (std::any_of(functional_tokens_.begin(), functional_tokens_.end(),
                             [c](char func_token){return func_token == c;})) {
-                if (c == 'x') graph_mode_ = true;
+                if (c == 'x') {
+                    graph_mode_ = true;
+                    if (x_string_calculate_)
+                        handleRuntimeExceptions("invalid expression: can't calculate x value"
+                                                        " recursively out of itself");
+                }
                 buildTokens(tokens, current_token, string(1, c), i);
             }
             else makeFunctionTokens(tokens, current_token, str, i);
@@ -124,9 +134,9 @@ bool Model::checkNormalizedNum(const string& str, size_t &index) noexcept {
     return false;
 }
 
-void Model::givePriorityValue(Node& token) {
+void Model::givePriorityAndValue(Node& token) {
     if (token.priority == -1) {
-        checkMultipleDots(token.name);
+        checkMultipleDots(token.name); //добавить обработку строки х
         token.value = std::stod(token.name);
     } else {
         token.priority = priority_map_[token.name];
@@ -153,7 +163,7 @@ void Model::cleanToken(Node& token) noexcept {
 void Model::buildTokens(vector_node& tokens, Node& current_token, const string& sub_token, size_t& index) {
     index += sub_token.length() - 1;
     current_token.name = sub_token;
-    givePriorityValue(current_token);
+    givePriorityAndValue(current_token);
     tokens.push_back(current_token);
 }
 
@@ -204,14 +214,12 @@ void Model::checkTokensLoop(vector_node& tokens, const Node& multiply, const Nod
         ++i;
     };
 
-
     for (; i < tokens.size(); ++i) {
         if (i + 1 < tokens.size()) {
-            if (tokens[i].name == "x" && tokens[i + 1].name == "x") {
-                func_token_insert_multiply(1);
-            } else if (tokens[i].priority == -1 &&
-                       (tokens[i + 1].name == "x" || tokens[i + 1].name == "(")) {
-                func_token_insert_multiply(1);
+            if ((tokens[i].priority == -1 && tokens[i + 1].priority == -1) ||
+                   (tokens[i].name == "x" && tokens[i + 1].name == "x")) {
+                handleRuntimeExceptions("implementation choice: can't yet process multiplication by constants"
+                                        " without a corresponding function token");
             } else if (tokens[i].name == ")" && tokens[i + 1].name == "(") {
                 func_token_insert_multiply(1);
             } else if (tokens[i].name == "(" && tokens[i + 1].name == "-") {
@@ -222,8 +230,6 @@ void Model::checkTokensLoop(vector_node& tokens, const Node& multiply, const Nod
                 func_token_insert_multiply(1);
             } else if (tokens[i].name == "(" && tokens[i + 1].name == "+") {
                 tokens.erase(begin + i + 1);
-//          } else if (tokens[i].priority == -1 && tokens[i + 1].priority == -1) {
-//                handleRuntimeExceptions("invalid expression: two consecutive numbers without a binary operator");
             } else if (tokens[i].name == "(" && tokens[i + 1].name == ")") {
                 handleRuntimeExceptions("incorrect usage of brackets: empty brackets");
             } else if (checkTokenIdentity(tokens[i]) == "binary function" &&
@@ -299,9 +305,7 @@ void Model::calculateXGraph(const ViewInfo& view_info, ModelInfo& model_info) {
             }
         }
         try {
-            evaluate_y_mode_ = true;
-            evaluatePostfixNotation(model_info, x_tokens);
-            evaluate_y_mode_ = false;
+            m.y_result = evaluatePostfixNotation(model_info, x_tokens);
             if (m.y_result < v.y_min || m.y_result > v.y_max)
                 handleRuntimeExceptions("y coordinate is out of bounds");
             x_temp.push_back(x_val);
@@ -318,7 +322,7 @@ void Model::calculateXGraph(const ViewInfo& view_info, ModelInfo& model_info) {
     m.graph_mode = true;
 }
 
-void Model::evaluatePostfixNotation(ModelInfo& model_info, const vector_node& tokens) {
+double Model::evaluatePostfixNotation(ModelInfo& model_info, const vector_node& tokens) {
     std::stack<double> numbers;
 
     for (const Node& token_iter : tokens) {
@@ -384,22 +388,22 @@ void Model::evaluatePostfixNotation(ModelInfo& model_info, const vector_node& to
     }
     if (numbers.size() != 1) handleRuntimeExceptions("invalid expression");
 
-    if (evaluate_y_mode_)
-        model_info.y_result = numbers.top();
-    else
-        model_info.result = numbers.top();
+    return numbers.top();
 }
 
 void Model::evaluatePostfixNotationForX(const ViewInfo& view_info, ModelInfo& model_info) {
+    ModelInfo x_model_info;
     vector_node x_tokens = tokens_;
 
-    for (Node& x_token : x_tokens) {
-        if (x_token.name == "x") {
-            x_token.name = view_info.x_string_value;
-            givePriorityValue(x_token);
-        }
-    }
-    evaluatePostfixNotation(model_info, x_tokens);
+    x_string_calculate_ = true;
+    startSmartCalc(view_info, x_model_info);
+    x_string_calculate_ = false;
+    if (!x_model_info.error.empty())
+        throw std::runtime_error(x_model_info.error.replace(0, 15, ""));
+
+    for (Node& x_token : x_tokens)
+        if (x_token.name == "x") x_token.value = x_model_info.result;
+    model_info.result = evaluatePostfixNotation(model_info, x_tokens);
 }
 
 void Model::turnTokensToLabel(ModelInfo& model_info, const vector_node& tokens) noexcept {
@@ -410,7 +414,6 @@ void Model::turnTokensToLabel(ModelInfo& model_info, const vector_node& tokens) 
             label += " ";
         label += token_iter.name;
     }
-
     model_info.label =  label;
 }
 
