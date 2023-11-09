@@ -65,7 +65,10 @@ background-color: solid rgb(128, 128, 128);
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">QPushButton {
+       <string notr="true">QStackedWidget {
+}
+
+QPushButton {
 background-color: rgb(201, 201, 201);
 border-bottom: 3px solid rgb(128, 128, 128);
 border-left: 2px solid rgb(180, 180, 180);
@@ -134,18 +137,61 @@ border: 2px solid rgb(8, 150, 170);
           <property name="verticalSpacing">
            <number>5</number>
           </property>
-          <item row="11" column="0">
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+          <item row="6" column="6" rowspan="2">
+           <widget class="QPushButton" name="pushButton_cos">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <property name="sizeHint" stdset="0">
+            <property name="minimumSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>40</width>
+              <height>40</height>
              </size>
             </property>
-           </spacer>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>cos</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="8" column="6" rowspan="2">
+           <widget class="QPushButton" name="pushButton_tan">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>tan</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
           </item>
           <item row="2" column="8" rowspan="4">
            <widget class="QPushButton" name="pushButton_backspace">
@@ -184,6 +230,170 @@ border: 2px solid rgb(8, 150, 170);
             </attribute>
            </widget>
           </item>
+          <item row="6" column="5" rowspan="2">
+           <widget class="QPushButton" name="pushButton_modulus">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>mod</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="6" column="2" rowspan="2">
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>2</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="8" column="3" rowspan="2">
+           <widget class="QPushButton" name="pushButton_dot">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>20</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>.</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="2" column="3" rowspan="2">
+           <widget class="QPushButton" name="pushButton_9">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>9</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>2</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="14" column="0" colspan="8">
+           <widget class="QLabel" name="label_line">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>390</width>
+              <height>3</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>400</width>
+              <height>3</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+border: 3px groove rgb(8, 150, 170);
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
           <item row="9" column="5">
            <widget class="QPushButton" name="pushButton_log10">
             <property name="sizePolicy">
@@ -209,6 +419,716 @@ border: 2px solid rgb(8, 150, 170);
             </property>
             <property name="text">
              <string>log</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="8" column="4" rowspan="2">
+           <widget class="QPushButton" name="pushButton_plus">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>+</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="16" column="0">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="6" column="1" rowspan="2">
+           <widget class="QPushButton" name="pushButton_1">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>1</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="12" column="5">
+           <widget class="QLabel" name="label_x_equals">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Academy Engraved LET</family>
+              <pointsize>21</pointsize>
+             </font>
+            </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+margin-top: 10px;
+margin-right: -10px;
+}</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>=</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2" rowspan="2">
+           <widget class="QPushButton" name="pushButton_5">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>5</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="2" column="7" rowspan="2">
+           <widget class="QPushButton" name="pushButton_right_bracket">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>)</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="13" column="6">
+           <spacer name="verticalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>4</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="8" column="7" rowspan="2">
+           <widget class="QPushButton" name="pushButton_atan">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>atan</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="8" column="1" rowspan="2" colspan="2">
+           <widget class="QPushButton" name="pushButton_0">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>92</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="6" column="3" rowspan="2">
+           <widget class="QPushButton" name="pushButton_3">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>3</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="4" column="5" rowspan="2">
+           <widget class="QPushButton" name="pushButton_square_root">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>√</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="6" column="0" rowspan="2">
+           <widget class="QPushButton" name="pushButton_e">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>18</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>e</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="2" colspan="8">
+           <widget class="QLineEdit" name="lineEdit_input">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>800</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLineEdit {
+background-color: white;
+border: 4px ridge rgb(40, 150, 170);
+}</string>
+            </property>
+            <property name="maxLength">
+             <number>255</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3" rowspan="2">
+           <widget class="QPushButton" name="pushButton_6">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>6</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="2" column="4" rowspan="2">
+           <widget class="QPushButton" name="pushButton_multiply">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>×</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="4" column="7" rowspan="2">
+           <widget class="QPushButton" name="pushButton_asin">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>asin</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="16" column="1" colspan="7">
+           <widget class="QLabel" name="label_x_notation">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>390</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="15" column="1" colspan="7">
+           <widget class="QLabel" name="label_notation">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>390</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>  Show postfix notation</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="1" colspan="4">
+           <widget class="QLineEdit" name="lineEdit_x">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>190</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>190</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+margin-top: 0px;
+margin-right: -6px;
+}</string>
+            </property>
+            <property name="maxLength">
+             <number>255</number>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" rowspan="2">
+           <widget class="QPushButton" name="pushButton_pi">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>18</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>π</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="12" column="6" colspan="2">
+           <widget class="QLabel" name="label_x_result">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>33</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+background-color: white;
+border: 3px double rgb(8, 150, 170);
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="5" rowspan="2">
+           <widget class="QPushButton" name="pushButton_exponentiation">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>^</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_print</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="15" column="0">
+           <widget class="QPushButton" name="pushButton_notation">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>10</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+background-color: rgb(201, 201, 201);
+border-bottom: 3px solid rgb(128, 128, 128);
+border-left: 2px solid rgb(180, 180, 180);
+border-radius: 4px;
+}
+
+QPushButton:hover{
+background-color: rgb(13, 170, 170);
+border-bottom: 3px solid rgb(15, 90, 110);
+border-left: 2px solid rgb(15, 135, 165);
+border-radius: 4px;
+}
+</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" rowspan="2">
+           <widget class="QPushButton" name="pushButton_4">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>4</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">buttonGroup_print</string>
@@ -241,37 +1161,6 @@ border: 2px solid rgb(8, 150, 170);
             <attribute name="buttonGroup">
              <string notr="true">buttonGroup_print</string>
             </attribute>
-           </widget>
-          </item>
-          <item row="12" column="1" colspan="3">
-           <widget class="QLineEdit" name="lineEdit_x">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>10</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>195</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="maxLength">
-             <number>255</number>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="8" column="5">
@@ -314,21 +1203,8 @@ border: 2px solid rgb(8, 150, 170);
             </attribute>
            </widget>
           </item>
-          <item row="15" column="0">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="2" column="7" rowspan="2">
-           <widget class="QPushButton" name="pushButton_right_bracket">
+          <item row="2" column="6" rowspan="2">
+           <widget class="QPushButton" name="pushButton_left_bracket">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -348,40 +1224,15 @@ border: 2px solid rgb(8, 150, 170);
              </size>
             </property>
             <property name="text">
-             <string>)</string>
+             <string>(</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">buttonGroup_print</string>
             </attribute>
            </widget>
           </item>
-          <item row="0" column="0" rowspan="2" colspan="8">
-           <widget class="QLineEdit" name="lineEdit_input">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>800</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maxLength">
-             <number>255</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="4" rowspan="2">
-           <widget class="QPushButton" name="pushButton_multiply">
+          <item row="2" column="1" rowspan="2">
+           <widget class="QPushButton" name="pushButton_7">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -401,15 +1252,15 @@ border: 2px solid rgb(8, 150, 170);
              </size>
             </property>
             <property name="text">
-             <string>×</string>
+             <string>7</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">buttonGroup_print</string>
             </attribute>
            </widget>
           </item>
-          <item row="2" column="3" rowspan="2">
-           <widget class="QPushButton" name="pushButton_9">
+          <item row="6" column="4" rowspan="2">
+           <widget class="QPushButton" name="pushButton_minus">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -429,63 +1280,15 @@ border: 2px solid rgb(8, 150, 170);
              </size>
             </property>
             <property name="text">
-             <string>9</string>
+             <string>-</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">buttonGroup_print</string>
             </attribute>
            </widget>
           </item>
-          <item row="14" column="0">
-           <widget class="QPushButton" name="pushButton_notation">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>10</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-background-color: rgb(201, 201, 201);
-border-bottom: 3px solid rgb(128, 128, 128);
-border-left: 2px solid rgb(180, 180, 180);
-border-radius: 4px;
-}
-
-QPushButton:hover {
-background-color: rgb(201, 201, 201);
-border-bottom: 3px solid rgb(128, 128, 128);
-border-left: 2px solid rgb(180, 180, 180);
-border-radius: 4px;
-}
-</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="16" column="1">
-           <spacer name="verticalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>200</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="6" column="2" rowspan="2">
-           <widget class="QPushButton" name="pushButton_2">
+          <item row="4" column="6" rowspan="2">
+           <widget class="QPushButton" name="pushButton_sin">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -505,159 +1308,11 @@ border-radius: 4px;
              </size>
             </property>
             <property name="text">
-             <string>2</string>
+             <string>sin</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">buttonGroup_print</string>
             </attribute>
-           </widget>
-          </item>
-          <item row="2" column="5" rowspan="2">
-           <widget class="QPushButton" name="pushButton_exponentiation">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>^</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="4" column="1" rowspan="2">
-           <widget class="QPushButton" name="pushButton_4">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>4</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="8" column="3" rowspan="2">
-           <widget class="QPushButton" name="pushButton_dot">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Lucida Grande</family>
-              <pointsize>20</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>.</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="4" column="7" rowspan="2">
-           <widget class="QPushButton" name="pushButton_asin">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>asin</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="13" column="0" colspan="8">
-           <widget class="QLabel" name="label_line">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>200</width>
-              <height>3</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>400</width>
-              <height>3</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QLabel {
-border: 3px groove rgb(8, 150, 170);
-}</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
            </widget>
           </item>
           <item row="0" column="8" rowspan="2">
@@ -728,50 +1383,6 @@ border: 3px groove rgb(8, 150, 170);
             </attribute>
            </widget>
           </item>
-          <item row="8" column="1" rowspan="2" colspan="2">
-           <widget class="QPushButton" name="pushButton_0">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>90</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>92</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="10" column="0">
-           <spacer name="verticalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="2" column="2" rowspan="2">
            <widget class="QPushButton" name="pushButton_8">
             <property name="sizePolicy">
@@ -800,350 +1411,21 @@ border: 3px groove rgb(8, 150, 170);
             </attribute>
            </widget>
           </item>
-          <item row="6" column="1" rowspan="2">
-           <widget class="QPushButton" name="pushButton_1">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="17" column="1">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
             </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>1</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="8" column="7" rowspan="2">
-           <widget class="QPushButton" name="pushButton_atan">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>atan</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="6" column="4" rowspan="2">
-           <widget class="QPushButton" name="pushButton_minus">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="12" column="0">
-           <widget class="QLabel" name="label_x_val">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
+            <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>16</height>
+              <height>130</height>
              </size>
             </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>12</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Academy Engraved LET</family>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QLabel {
-margin-top: 0px;
-margin-right: -6px;
-}</string>
-            </property>
-            <property name="text">
-             <string> [ X = ]</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="4" rowspan="2">
-           <widget class="QPushButton" name="pushButton_plus">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>+</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="6" column="5" rowspan="2">
-           <widget class="QPushButton" name="pushButton_modulus">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>mod</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="2" column="6" rowspan="2">
-           <widget class="QPushButton" name="pushButton_left_bracket">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>(</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="2" column="1" rowspan="2">
-           <widget class="QPushButton" name="pushButton_7">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>7</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="4" column="6" rowspan="2">
-           <widget class="QPushButton" name="pushButton_sin">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>sin</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="8" column="6" rowspan="2">
-           <widget class="QPushButton" name="pushButton_tan">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>tan</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="4" column="2" rowspan="2">
-           <widget class="QPushButton" name="pushButton_5">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>5</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="4" column="3" rowspan="2">
-           <widget class="QPushButton" name="pushButton_6">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>6</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
+           </spacer>
           </item>
           <item row="6" column="7" rowspan="2">
            <widget class="QPushButton" name="pushButton_acos">
@@ -1167,130 +1449,6 @@ margin-right: -6px;
             </property>
             <property name="text">
              <string>acos</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="6" column="6" rowspan="2">
-           <widget class="QPushButton" name="pushButton_cos">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>cos</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="4" column="0" rowspan="2">
-           <widget class="QPushButton" name="pushButton_pi">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Lucida Grande</family>
-              <pointsize>18</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>π</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="6" column="3" rowspan="2">
-           <widget class="QPushButton" name="pushButton_3">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>3</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="6" column="0" rowspan="2">
-           <widget class="QPushButton" name="pushButton_e">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Lucida Grande</family>
-              <pointsize>18</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>e</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">buttonGroup_print</string>
@@ -1361,56 +1519,25 @@ border: 2px solid rgb(8, 150, 170);
             </attribute>
            </widget>
           </item>
-          <item row="4" column="5" rowspan="2">
-           <widget class="QPushButton" name="pushButton_square_root">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="12" column="0">
+           <widget class="QLabel" name="label">
+            <property name="font">
+             <font>
+              <family>Academy Engraved LET</family>
+              <pointsize>20</pointsize>
+             </font>
             </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+margin-top: 10px;
+margin-right: -10px;
+}</string>
             </property>
             <property name="text">
-             <string>√</string>
+             <string>X =</string>
             </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_print</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="14" column="1" colspan="8">
-           <widget class="QLabel" name="label_notation">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>390</width>
-              <height>16</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>390</width>
-              <height>16</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>  Show postfix notation</string>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -1503,6 +1630,9 @@ QSlider::handle:horizontal:hover {
               <height>25</height>
              </size>
             </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="text">
              <string>1000</string>
             </property>
@@ -1534,7 +1664,7 @@ QSlider::handle:horizontal:hover {
             <property name="styleSheet">
              <string notr="true">QLabel {
 background-color: white;
-border: 2px solid rgb(8, 150, 170);
+border: 4px ridge rgb(40, 150, 170);
 }</string>
             </property>
             <property name="text">
@@ -1807,6 +1937,9 @@ density</string>
               <height>25</height>
              </size>
             </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="text">
              <string>-1000</string>
             </property>
@@ -1834,6 +1967,9 @@ density</string>
               <width>65</width>
               <height>25</height>
              </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>1000</string>
@@ -1905,6 +2041,11 @@ density</string>
      <width>961</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Lucida Grande</family>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">QMenuBar {

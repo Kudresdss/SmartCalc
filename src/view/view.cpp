@@ -46,10 +46,13 @@ void View::startSmartCalculator_SignalFromModel() {
     ui->customPlot->replot();
     ui->statusbar->showMessage(tr(model_info_.error.c_str()));
     ui->label_result->setText(QString::number(model_info_.result, 'f', 5));
+    ui->label_x_result->setText(QString::number(model_info_.x_input_value, 'f', 5));
     if (model_info_.graph_mode)
         buildGraph();
-    if (toggle_notation_)
-        ui->label_notation->setText(QString::fromStdString(model_info_.label));
+    if (toggle_notation_) {
+        ui->label_notation->setText(QString::fromStdString(model_info_.label_tokens));
+        ui->label_x_notation->setText(QString::fromStdString(model_info_.label_x_tokens));
+    }
 }
 
 void View::printInLineEdit(QAbstractButton* button_pressed) {
@@ -169,18 +172,27 @@ void View::connectAll() {
 void View::toggleNotationLable() {
     toggle_notation_ = !toggle_notation_;
     if (toggle_notation_) {
-        ui->label_notation->setText(QString::fromStdString(model_info_.label));
-        ui->pushButton_notation->setStyleSheet("background-color: rgb(13, 170, 170);"
-                                               "border-bottom: 3px solid rgb(15, 90, 110);"
-                                               "border-left: 2px solid rgb(15, 135, 165);"
-                                               "border-radius: 4px;");
+        ui->label_notation->setText(QString::fromStdString(model_info_.label_tokens));
+        ui->label_x_notation->setText(QString::fromStdString(model_info_.label_x_tokens));
+        ui->pushButton_notation->setStyleSheet("QPushButton{\n"
+                                               "background-color: rgb(13, 170, 170);\n"
+                                               "border-bottom: 3px solid rgb(15, 90, 110);\n"
+                                               "border-left: 2px solid rgb(15, 135, 165);\n"
+                                               "border-radius: 4px;}\n"
+                                               "QPushButton:hover{\n"
+                                               "background-color: rgb(11, 150, 150);\n"
+                                               "border-bottom: 3px solid rgb(12, 70, 90);\n"
+                                               "border-left: 2px solid rgb(12, 115, 145);\n"
+                                               "border-radius: 4px;}");
     }
     else {
         ui->label_notation->setText("");
-        ui->pushButton_notation->setStyleSheet("background-color: rgb(201, 201, 201);"
-                                               "border-bottom: 3px solid rgb(128, 128, 128);"
-                                               "border-left: 2px solid rgb(180, 180, 180);"
-                                               "border-radius: 4px;");
+        ui->label_x_notation->setText("");
+        ui->pushButton_notation->setStyleSheet("QPushButton:hover{\n"
+                                               "background-color: rgb(13, 170, 170);\n"
+                                               "border-bottom: 3px solid rgb(15, 90, 110);\n"
+                                               "border-left: 2px solid rgb(15, 135, 165);\n"
+                                               "border-radius: 4px;}");
     }
 }
 

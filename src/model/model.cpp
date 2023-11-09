@@ -1,5 +1,7 @@
 #include "model.h"
 
+#include <iostream>
+
 namespace s21 {
 
 Model& Model::getInstance() {
@@ -33,12 +35,11 @@ void Model::startSmartCalc(const ViewInfo& view_info, ModelInfo& model_info) {
             evaluatePostfixNotationForX(view_info, model_info);
         } else
             model_info.result = evaluatePostfixNotation(model_info, tokens_);
-        if (!x_string_calculate_) {
-            turnTokensToLabel(model_info, tokens_);
-            result_ = model_info.result;
-            output_status_ = model_info.label;
-        }
-    } catch (const std::exception& error) {
+        turnTokensToLabel(model_info);
+        result_ = model_info.result;
+        output_status_ = model_info.label_tokens;
+    }
+    catch (const std::exception& error) {
         string error_str = "Runtime error: ";
         model_info.error = error_str + error.what();
     }
@@ -393,28 +394,38 @@ double Model::evaluatePostfixNotation(ModelInfo& model_info, const vector_node& 
 
 void Model::evaluatePostfixNotationForX(const ViewInfo& view_info, ModelInfo& model_info) {
     ModelInfo x_model_info;
-    vector_node x_tokens = tokens_;
+    vector_node tokens_before_x_calculate = tokens_;
 
     x_string_calculate_ = true;
     startSmartCalc(view_info, x_model_info);
     x_string_calculate_ = false;
+
+    x_tokens_ = tokens_;
+    tokens_ = tokens_before_x_calculate;
     if (!x_model_info.error.empty())
         throw std::runtime_error(x_model_info.error.replace(0, 15, ""));
 
-    for (Node& x_token : x_tokens)
+    model_info.x_input_value = x_model_info.result;;
+    for (Node& x_token : tokens_before_x_calculate)
         if (x_token.name == "x") x_token.value = x_model_info.result;
-    model_info.result = evaluatePostfixNotation(model_info, x_tokens);
+    model_info.result = evaluatePostfixNotation(model_info, tokens_before_x_calculate);
 }
 
-void Model::turnTokensToLabel(ModelInfo& model_info, const vector_node& tokens) noexcept {
+void Model::turnTokensToLabel(ModelInfo& model_info) noexcept {
     string label;
 
-    for (const Node& token_iter : tokens) {
-        if (!label.empty())
-            label += " ";
-        label += token_iter.name;
-    }
-    model_info.label =  label;
+    auto func_tokens_to_label = [&label](vector_node &tokens) -> string {
+        for (const Node& token_iter : tokens) {
+            if (!label.empty())
+                label += " ";
+            label += token_iter.name;
+        }
+        return label;
+    };
+    model_info.label_tokens = "[]: " + func_tokens_to_label(tokens_);
+    label = "";
+    if (!x_tokens_.empty())
+        model_info.label_x_tokens = "X: " + func_tokens_to_label(x_tokens_);
 }
 
 void Model::handleRuntimeExceptions(const string& exception) {

@@ -27,13 +27,15 @@ struct ViewInfo {
 };
 
 struct ModelInfo {
-    std::string label;
+    std::string label_tokens;
+    std::string label_x_tokens;
     std::string error;
     std::vector<std::vector<double>> x_coord = {};
     std::vector<std::vector<double>> y_coord = {};
 
     bool graph_mode = 0;
     double result = 0;
+    double x_input_value;
     double y_result = 0;
 };
 

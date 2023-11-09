@@ -49,7 +49,7 @@ private:
     void calculateXGraph(const ViewInfo& view_info, ModelInfo& model_info);
     double evaluatePostfixNotation(ModelInfo& model_info, const vector_node& tokens);
     void evaluatePostfixNotationForX(const ViewInfo& view_info, ModelInfo& model_info);
-    void turnTokensToLabel(ModelInfo& model_info, const vector_node& tokens) noexcept;
+    void turnTokensToLabel(ModelInfo& model_info) noexcept;
     void handleRuntimeExceptions(const string& exception);
 
     double result_;
@@ -60,6 +60,7 @@ private:
     bool   graph_mode_ = false;
     bool   x_string_calculate_ = false;
     vector_node tokens_ = {};
+    vector_node x_tokens_ = {};
     std::vector<char> functional_tokens_ = {'+', '-', '*', '/', '^', '(', ')', 'e', 'x'};
     std::vector<string> functions_ = {"π", "ln", "mod", "log", "sin", "cos", "tan", "asin", "acos", "atan", "√"};
     std::vector<string> binary_functions_ = {"+", "-", "*", "/", "^", "mod"};
