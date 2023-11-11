@@ -20,10 +20,10 @@ struct ViewInfo {
     std::string x_string = "0";
 
     unsigned int points_density = 1000;
-    double x_max = 10;
-    double x_min = -10;
-    double y_max = 10;
-    double y_min = -10;
+    double x_max = 100;
+    double x_min = -100;
+    double y_max = 100;
+    double y_min = -100;
 };
 
 struct ModelInfo {

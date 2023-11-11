@@ -15,6 +15,7 @@ View::View(QWidget *parent)
     ui->lineEdit_x->installEventFilter(line_edit_filter_);
 
     connectAll();
+    setGraphInfo();
     ui->lineEdit_input->setFocus();
 }
 
@@ -29,30 +30,34 @@ void View::setTheme() {
 }
 
 void View::startSmartCalculator_SignalToModel() {
-    ViewInfo view_info;
-
-    view_info.input_string = ui->lineEdit_input->text().toStdString();
-    view_info.points_density = ui->verticalSlider_graph->sliderPosition();
-    view_info.x_string = ui->lineEdit_x->text().toStdString();
-    view_info.x_max = ui->lineEdit_x_max->text().toDouble();
-    view_info.x_min = ui->lineEdit_x_min->text().toDouble();
-    view_info.y_max = ui->lineEdit_y_max->text().toDouble();
-    view_info.y_min = ui->lineEdit_x_min->text().toDouble();
-    emit signalSmartToModel(view_info);
+    ui->statusbar->showMessage(QString(""));
+    ui->label_x_result->setText(QString(""));
+    view_info_.input_string = ui->lineEdit_input->text().toStdString();
+    view_info_.x_string = ui->lineEdit_x->text().toStdString();
+    setGraphInfo();
+    if (no_error_)
+        emit signalSmartToModel(view_info_);
+    no_error_ = true;
 }
 
 void View::startSmartCalculator_SignalFromModel() {
-    ui->customPlot->clearGraphs();
-    ui->customPlot->replot();
-    ui->statusbar->showMessage(tr(model_info_.error.c_str()));
+    if (!model_info_.error.empty()) {
+        ui->statusbar->showMessage(tr(model_info_.error.c_str()));
+        model_info_.error = "";
+    }
+
     ui->label_result->setText(QString::number(model_info_.result, 'f', 5));
-    ui->label_x_result->setText(QString::number(model_info_.x_input_value, 'f', 5));
-    if (model_info_.graph_mode)
-        buildGraph();
+    if (!view_info_.x_string.empty())
+        ui->label_x_result->setText(QString::number(model_info_.x_input_value, 'f', 5));
     if (toggle_notation_) {
         ui->label_notation->setText(QString::fromStdString(model_info_.label_tokens));
         ui->label_x_notation->setText(QString::fromStdString(model_info_.label_x_tokens));
     }
+
+    ui->customPlot->clearGraphs();
+    ui->customPlot->replot();
+    if (model_info_.graph_mode)
+        buildGraph();
 }
 
 void View::printInLineEdit(QAbstractButton* button_pressed) {
@@ -130,6 +135,23 @@ void View::printInLineEdit(QAbstractButton* button_pressed) {
     line_edit->setCursorPosition(new_position);
 }
 
+void View::setGraphInfo() {
+    view_info_.points_density = ui->verticalSlider_graph->sliderPosition();
+
+    view_info_.x_max = ui->lineEdit_x_max->text().toInt(&no_error_);
+    if (no_error_) view_info_.x_min = ui->lineEdit_x_min->text().toInt(&no_error_);
+    if (no_error_) view_info_.y_max = ui->lineEdit_y_max->text().toInt(&no_error_);
+    if (no_error_) view_info_.y_min = ui->lineEdit_y_min->text().toInt(&no_error_);
+    if (no_error_) {
+    ui->customPlot->xAxis->setRange(view_info_.x_min, view_info_.x_max);
+    ui->customPlot->yAxis->setRange(view_info_.y_min, view_info_.y_max);
+    ui->customPlot->replot();
+    }
+    else
+        ui->statusbar->showMessage(QString("Runtime error: "
+                                                    "toInt() failed to convert min/max axis range value"));
+}
+
 void View::buildGraph() {
     QPen pen;
     size_t max_size = model_info_.x_coord.size();
@@ -142,6 +164,10 @@ void View::buildGraph() {
         }
         if ((!(x.empty() || y.empty())) && model_info_.error.empty()) {
             pen.setColor(QColor(QColorConstants::Black));
+            pen.setStyle(Qt::SolidLine);
+            pen.setCapStyle(Qt::RoundCap);
+            pen.setJoinStyle(Qt::RoundJoin);
+
             pen.setWidth(2);
             ui->customPlot->addGraph();
             ui->customPlot->graph(i)->addData(x, y);
@@ -166,10 +192,10 @@ void View::connectAll() {
     connect(ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(startSmartCalculator_SignalToModel()));
     connect(ui->verticalSlider_graph, SIGNAL(sliderMoved(int)), this, SLOT(startSmartCalculator_SignalToModel()));
 
-    connect(ui->pushButton_notation, SIGNAL(clicked()), this, SLOT(toggleNotationLable()));
+    connect(ui->pushButton_notation, SIGNAL(clicked()), this, SLOT(toggleNotationLabel()));
 }
 
-void View::toggleNotationLable() {
+void View::toggleNotationLabel() {
     toggle_notation_ = !toggle_notation_;
     if (toggle_notation_) {
         ui->label_notation->setText(QString::fromStdString(model_info_.label_tokens));

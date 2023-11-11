@@ -52,10 +52,10 @@ private:
     void turnTokensToLabel(ModelInfo& model_info) noexcept;
     void handleRuntimeExceptions(const string& exception);
 
-    double result_;
+    bool   error_ = false;
+    double result_ = 0;
     string input_str_;
     string output_status_;
-    bool   error_ = false;
     bool   new_str_ = false;
     bool   graph_mode_ = false;
     bool   x_string_calculate_ = false;

@@ -1,7 +1,5 @@
 #include "model.h"
 
-#include <iostream>
-
 namespace s21 {
 
 Model& Model::getInstance() {
@@ -183,7 +181,7 @@ void Model::checkTokens(vector_node& tokens) {
     };
 
     if (tokens.empty())
-        handleRuntimeExceptions("~");
+        handleRuntimeExceptions("empty input");
     if (tokens.size() > 1 && tokens[0].name == "+") tokens.erase(tokens.begin());
     if (tokens[0].name == "-") {
         tokens[0] = minus_one;
@@ -422,6 +420,7 @@ void Model::turnTokensToLabel(ModelInfo& model_info) noexcept {
         }
         return label;
     };
+
     model_info.label_tokens = "[]: " + func_tokens_to_label(tokens_);
     label = "";
     if (!x_tokens_.empty())

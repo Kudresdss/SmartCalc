@@ -29,43 +29,35 @@ Q_OBJECT
 
 public:
     explicit View(QWidget *parent = nullptr);
-
     ~View();
 
     void setTheme();
-
     void buildGraph();
 
 public slots:
-
     void slotModelToSmart(ModelInfo &model_info);
 
 private slots:
-
     void startSmartCalculator_SignalToModel();
-
     void printInLineEdit(QAbstractButton *button_pressed);
-
-    void toggleNotationLable();
-
+    void toggleNotationLabel();
     void on_actionOpen_project_triggered();
-
     void on_actionOpen_project_2_triggered();
-
     void on_actionOpen_project_3_triggered();
 
 signals:
-
     void signalSmartToModel(ViewInfo &view_info);
 
 private:
     void startSmartCalculator_SignalFromModel();
-
+    void setGraphInfo();
     void connectAll();
 
-    int line_edit_index_ = 0;
+    bool no_error_ = true; // qt toInt() sets it to false if error occurs;
+    size_t line_edit_index_ = 0;
     bool toggle_notation_ = false;
     Ui::View *ui;
+    ViewInfo view_info_;
     ModelInfo model_info_;
     std::vector<QString> generic_tokens_ = {".", "0", "1", "2", "3", "4", "5", "6", "7", "8",
                                             "9", "+", "-", "×", "÷", "(", ")"};
