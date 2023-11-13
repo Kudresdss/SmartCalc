@@ -23,41 +23,122 @@ View::~View() {
     delete ui;
 }
 
-void View::setTheme() {
-    int font_id = QFontDatabase::addApplicationFont(":/fonts/LucidaGrande.ttc");
-    QString family = QFontDatabase::applicationFontFamilies(font_id).at(0);
-    QFont monospace(family);
+//SmartCalc:
+
+void View::cleanSmartLabelsAndGraphs() {
+    ui->label_result->setText("");
+    ui->label_x_result->setText("");
+    model_info_.label_tokens = "";
+    model_info_.x_label_tokens = "";
+    ui->label_notation->setText(QString::fromStdString(model_info_.label_tokens));
+    ui->label_x_notation->setText(QString::fromStdString(model_info_.x_label_tokens));
+    ui->customPlot->clearGraphs();
+    ui->customPlot->replot();
 }
 
 void View::startSmartCalculator_SignalToModel() {
-    ui->statusbar->showMessage(QString(""));
-    ui->label_x_result->setText(QString(""));
-    view_info_.input_string = ui->lineEdit_input->text().toStdString();
-    view_info_.x_string = ui->lineEdit_x->text().toStdString();
+    ViewInfo new_view_info;
+
+    view_info_ = new_view_info;
+    ui->statusbar->showMessage("");
+    cleanSmartLabelsAndGraphs();
+
+    view_info_.main_input = ui->lineEdit_input->text().toStdString();
+    if (!view_info_.main_input.empty()) {
+        view_info_.main_input_exists = true;
+        view_info_.x_in_main_input = ui->lineEdit_input->text().contains("x", Qt::CaseSensitive);
+    }
+    view_info_.x_input = ui->lineEdit_x->text().toStdString();
+    if (!view_info_.x_input.empty()) {
+        view_info_.x_input_exists = true;
+        if (ui->lineEdit_x->text().contains("x", Qt::CaseSensitive)) {
+            ui->statusbar->showMessage("Invalid expression: can't calculate x value\n"
+                                            "recursively out of itself");
+            ui->label_x_result->setText("nan");
+            error_ = false;
+            return;
+        }
+    }
+    if (!view_info_.main_input_exists) {
+        ui->statusbar->showMessage("Main input is empty");
+        error_ = false;
+        return;
+    }
+    if (view_info_.x_in_main_input && !view_info_.x_input_exists) {
+        ui->statusbar->showMessage("X in main input, but x input is empty");
+        error_ = false;
+        return;
+    }
+
     setGraphInfo();
-    if (no_error_)
+    if (!error_)
         emit signalSmartToModel(view_info_);
-    no_error_ = true;
+    error_ = false;
 }
 
 void View::startSmartCalculator_SignalFromModel() {
+    error_ = false;
     if (!model_info_.error.empty()) {
         ui->statusbar->showMessage(tr(model_info_.error.c_str()));
-        model_info_.error = "";
+        return;
     }
 
-    ui->label_result->setText(QString::number(model_info_.result, 'f', 5));
-    if (!view_info_.x_string.empty())
-        ui->label_x_result->setText(QString::number(model_info_.x_input_value, 'f', 5));
+    if (!view_info_.x_input_exists) {
+        model_info_.x_label_tokens = "";
+        ui->label_x_notation->setText(QString::fromStdString(model_info_.x_label_tokens));
+    }
+    ui->label_result->setText(QString::number(model_info_.result, 'd', 7));
+    if (view_info_.x_input_exists)
+        ui->label_x_result->setText(QString::number(model_info_.x_input_value, 'd', 7));
     if (toggle_notation_) {
         ui->label_notation->setText(QString::fromStdString(model_info_.label_tokens));
-        ui->label_x_notation->setText(QString::fromStdString(model_info_.label_x_tokens));
+        if (view_info_.x_input_exists)
+            ui->label_x_notation->setText(QString::fromStdString(model_info_.x_label_tokens));
     }
-
-    ui->customPlot->clearGraphs();
-    ui->customPlot->replot();
     if (model_info_.graph_mode)
         buildGraph();
+}
+
+void View::setGraphInfo() {
+    bool no_error = true;
+
+    view_info_.points_density = ui->verticalSlider_graph->sliderPosition();
+    view_info_.x_max = ui->lineEdit_x_max->text().toInt(&no_error);
+    if (no_error) view_info_.x_min = ui->lineEdit_x_min->text().toInt(&no_error);
+    if (no_error) view_info_.y_max = ui->lineEdit_y_max->text().toInt(&no_error);
+    if (no_error) view_info_.y_min = ui->lineEdit_y_min->text().toInt(&no_error);
+    error_ = !no_error;
+    if (!error_) {
+        ui->customPlot->xAxis->setRange(view_info_.x_min, view_info_.x_max);
+        ui->customPlot->yAxis->setRange(view_info_.y_min, view_info_.y_max);
+        ui->customPlot->replot();
+    }
+    else {
+        ui->statusbar->showMessage(QString("Wrong min/max axis input: must be int value"));
+        cleanSmartLabelsAndGraphs();
+    }
+}
+
+void View::buildGraph() {
+    size_t max_size = model_info_.x_coord.size();
+
+    ui->customPlot->xAxis->setRange(view_info_.x_min, view_info_.x_max);
+    ui->customPlot->yAxis->setRange(view_info_.y_min, view_info_.y_max);
+    ui->customPlot->xAxis->scaleRange(ui->horizontalSlider_graph_x->sliderPosition());
+    ui->customPlot->yAxis->scaleRange(ui->horizontalSlider_graph_y->sliderPosition());
+    for (size_t i = 0; i < max_size; ++i) {
+        QVector<double> x, y;
+        for (size_t j = 0; j < model_info_.x_coord[i].size(); ++j) {
+            x.push_back(model_info_.x_coord[i][j]);
+            y.push_back(model_info_.y_coord[i][j]);
+        }
+        if ((!(x.empty() || y.empty())) && model_info_.error.empty()) {
+            ui->customPlot->addGraph();
+            ui->customPlot->graph(i)->addData(x, y);
+            ui->customPlot->graph(i)->setPen(graph_pen_);
+            ui->customPlot->replot();
+        }
+    }
 }
 
 void View::printInLineEdit(QAbstractButton* button_pressed) {
@@ -135,46 +216,98 @@ void View::printInLineEdit(QAbstractButton* button_pressed) {
     line_edit->setCursorPosition(new_position);
 }
 
-void View::setGraphInfo() {
-    view_info_.points_density = ui->verticalSlider_graph->sliderPosition();
+//CreditCalc:
 
-    view_info_.x_max = ui->lineEdit_x_max->text().toInt(&no_error_);
-    if (no_error_) view_info_.x_min = ui->lineEdit_x_min->text().toInt(&no_error_);
-    if (no_error_) view_info_.y_max = ui->lineEdit_y_max->text().toInt(&no_error_);
-    if (no_error_) view_info_.y_min = ui->lineEdit_y_min->text().toInt(&no_error_);
-    if (no_error_) {
-    ui->customPlot->xAxis->setRange(view_info_.x_min, view_info_.x_max);
-    ui->customPlot->yAxis->setRange(view_info_.y_min, view_info_.y_max);
-    ui->customPlot->replot();
-    }
-    else
-        ui->statusbar->showMessage(QString("Runtime error: "
-                                                    "toInt() failed to convert min/max axis range value"));
+void View::cleanCreditLabels() {
 }
 
-void View::buildGraph() {
-    QPen pen;
-    size_t max_size = model_info_.x_coord.size();
+void View::startCreditCalculator_SignalToModel() {
+    ViewInfo new_view_info;
+    bool no_error_ = true;
 
-    for (size_t i = 0; i < max_size; ++i) {
-        QVector<double> x, y;
-        for (size_t j = 0; j < model_info_.x_coord[i].size(); ++j) {
-            x.push_back(model_info_.x_coord[i][j]);
-            y.push_back(model_info_.y_coord[i][j]);
-        }
-        if ((!(x.empty() || y.empty())) && model_info_.error.empty()) {
-            pen.setColor(QColor(QColorConstants::Black));
-            pen.setStyle(Qt::SolidLine);
-            pen.setCapStyle(Qt::RoundCap);
-            pen.setJoinStyle(Qt::RoundJoin);
+    if (credit_table_) {
+        delete credit_table_;
+        credit_table_ = nullptr;
+    }
 
-            pen.setWidth(2);
-            ui->customPlot->addGraph();
-            ui->customPlot->graph(i)->addData(x, y);
-            ui->customPlot->graph(i)->setPen(pen);
-            ui->customPlot->replot();
+    view_info_ = new_view_info;
+    ui->statusbar->showMessage("");
+    view_info_.annuity = toggle_annuity_;
+    view_info_.deferred = toggle_deferred_;
+    if (!toggle_annuity_ || !toggle_deferred_) {
+        ui->statusbar->showMessage("Chose repayment type");
+        cleanCreditLabels();
+        return;
+    }
+
+    if (ui->lineEdit_loan_amount->text().isEmpty()) {
+        ui->statusbar->showMessage("Loan amount is empty");
+        cleanCreditLabels();
+        return;
+    }
+    else {
+        view_info_.loan_amount = ui->lineEdit_loan_amount->text().toULong(&no_error_);
+        if (!no_error_ || view_info_.loan_amount > 1000000000000) {
+            ui->statusbar->showMessage("Incorrect loan amount value");
+            cleanCreditLabels();
+            return;
         }
     }
+    if (ui->lineEdit_loan_term->text().isEmpty()) {
+        ui->statusbar->showMessage("Loan term is empty");
+        cleanCreditLabels();
+        return;
+    }
+    else {
+        view_info_.loan_term = ui->lineEdit_loan_term->text().toUInt(&no_error_);
+        if (!no_error_ || (1 <= view_info_.loan_term && view_info_.loan_term > 1000)) {
+            ui->statusbar->showMessage("Incorrect loan term value");
+            cleanCreditLabels();
+            return;
+        }
+    }
+    if (ui->lineEdit_interest_rate->text().isEmpty()) {
+        ui->statusbar->showMessage("Interest rate is empty");
+        cleanCreditLabels();
+        return;
+    }
+    else {
+        view_info_.interest_rate = ui->lineEdit_interest_rate->text().toUInt(&no_error_);
+        if (!no_error_ || view_info_.interest_rate > 100) {
+            ui->statusbar->showMessage("Incorrect interest rate value");
+            cleanCreditLabels();
+            return;
+        }
+    }
+
+    if (!error_)
+            emit signalCreditToModel(view_info_);
+    error_ = false;
+}
+
+void View::startCreditCalculator_SignalFromModel() {
+    
+}
+
+//General or purely visual style methods:
+
+void View::setTheme() {
+    int font_id = QFontDatabase::addApplicationFont(":/fonts/LucidaGrande.ttc");
+    QString family = QFontDatabase::applicationFontFamilies(font_id).at(0);
+    QFont monospace(family);
+
+    graph_pen_.setColor(QColor(QColorConstants::Black));
+    graph_pen_.setStyle(Qt::SolidLine);
+    graph_pen_.setCapStyle(Qt::RoundCap);
+    graph_pen_.setJoinStyle(Qt::RoundJoin);
+    graph_pen_.setWidth(2);
+
+    ui->customPlot->setInteraction(QCP::iRangeZoom, true);
+    ui->customPlot->setInteraction(QCP::iRangeDrag, true);
+
+    ui->gridLayout_loan->setAlignment(ui->pushButton_annuity, Qt::AlignHCenter);
+    ui->gridLayout_loan->setAlignment(ui->pushButton_deferred, Qt::AlignHCenter);
+    ui->gridLayout_loan->setAlignment(ui->pushButton_calculate, Qt::AlignHCenter);
 }
 
 void View::connectAll() {
@@ -189,23 +322,27 @@ void View::connectAll() {
     connect(ui->lineEdit_input, &QLineEdit::textChanged, this, [this]() {line_edit_index_=1;});
     connect(ui->lineEdit_x, &QLineEdit::textChanged, this, [this]() {line_edit_index_=2;});
 
-    connect(ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(startSmartCalculator_SignalToModel()));
     connect(ui->verticalSlider_graph, SIGNAL(sliderMoved(int)), this, SLOT(startSmartCalculator_SignalToModel()));
+    connect(ui->horizontalSlider_graph_x, SIGNAL(sliderMoved(int)), this, SLOT(buildGraph()));
+    connect(ui->horizontalSlider_graph_y, SIGNAL(sliderMoved(int)), this, SLOT(buildGraph()));
 
     connect(ui->pushButton_notation, SIGNAL(clicked()), this, SLOT(toggleNotationLabel()));
+    connect(ui->pushButton_annuity, SIGNAL(clicked()), this, SLOT(toggleAnnuity()));
+    connect(ui->pushButton_deferred, SIGNAL(clicked()), this, SLOT(toggleDeferred()));
+
 }
 
 void View::toggleNotationLabel() {
     toggle_notation_ = !toggle_notation_;
     if (toggle_notation_) {
         ui->label_notation->setText(QString::fromStdString(model_info_.label_tokens));
-        ui->label_x_notation->setText(QString::fromStdString(model_info_.label_x_tokens));
-        ui->pushButton_notation->setStyleSheet("QPushButton{\n"
+        ui->label_x_notation->setText(QString::fromStdString(model_info_.x_label_tokens));
+        ui->pushButton_notation->setStyleSheet("QPushButton {\n"
                                                "background-color: rgb(13, 170, 170);\n"
                                                "border-bottom: 3px solid rgb(15, 90, 110);\n"
                                                "border-left: 2px solid rgb(15, 135, 165);\n"
                                                "border-radius: 4px;}\n"
-                                               "QPushButton:hover{\n"
+                                               "QPushButton:hover {\n"
                                                "background-color: rgb(11, 150, 150);\n"
                                                "border-bottom: 3px solid rgb(12, 70, 90);\n"
                                                "border-left: 2px solid rgb(12, 115, 145);\n"
@@ -214,7 +351,7 @@ void View::toggleNotationLabel() {
     else {
         ui->label_notation->setText("");
         ui->label_x_notation->setText("");
-        ui->pushButton_notation->setStyleSheet("QPushButton:hover{\n"
+        ui->pushButton_notation->setStyleSheet("QPushButton:hover {\n"
                                                "background-color: rgb(13, 170, 170);\n"
                                                "border-bottom: 3px solid rgb(15, 90, 110);\n"
                                                "border-left: 2px solid rgb(15, 135, 165);\n"
@@ -222,9 +359,70 @@ void View::toggleNotationLabel() {
     }
 }
 
+void View::toggleAnnuity() {
+    toggle_annuity_ = !toggle_annuity_;
+    if (toggle_annuity_) {
+        if (toggle_deferred_)
+            toggleDeferred();
+        ui->pushButton_annuity->setStyleSheet("QPushButton {\n"
+                                              "background-color: rgb(15, 195, 227);\n"
+                                              "border-bottom: 3px solid rgb(15, 110, 130);\n"
+                                              "border-left: 2px solid rgb(15, 150, 180);\n"
+                                              "color: rgb(255, 255, 255);\n"
+                                              "border-radius: 4px;}\n"
+                                              "QPushButton:hover {\n"
+                                              "background-color: rgb(13, 170, 200);\n"
+                                              "border-bottom: 3px solid rgb(15, 90, 110);\n"
+                                              "border-left: 2px solid rgb(15, 135, 165);\n"
+                                              "color: rgb(255, 255, 255);\n"
+                                              "border-radius: 4px;}");
+    }
+    else {
+        ui->pushButton_annuity->setStyleSheet("QPushButton:hover {\n"
+                                              "background-color: rgb(15, 195, 227);\n"
+                                              "border-bottom: 3px solid rgb(15, 110, 130);\n"
+                                              "border-left: 2px solid rgb(15, 150, 180);\n"
+                                              "color: rgb(255, 255, 255);\n"
+                                              "border-radius: 4px;}");
+    }
+}
+
+void View::toggleDeferred() {
+    toggle_deferred_ = !toggle_deferred_;
+    if (toggle_deferred_) {
+        if (toggle_annuity_)
+            toggleAnnuity();
+        ui->pushButton_deferred->setStyleSheet("QPushButton {\n"
+                                               "background-color: rgb(15, 195, 227);\n"
+                                               "border-bottom: 3px solid rgb(15, 110, 130);\n"
+                                               "border-left: 2px solid rgb(15, 150, 180);\n"
+                                               "color: rgb(255, 255, 255);\n"
+                                               "border-radius: 4px;}\n"
+                                               "QPushButton:hover {\n"
+                                               "background-color: rgb(13, 170, 200);\n"
+                                               "border-bottom: 3px solid rgb(15, 90, 110);\n"
+                                               "border-left: 2px solid rgb(15, 135, 165);\n"
+                                               "color: rgb(255, 255, 255);\n"
+                                               "border-radius: 4px;}");
+    }
+    else {
+        ui->pushButton_deferred->setStyleSheet("QPushButton:hover {\n"
+                                               "background-color: rgb(15, 195, 227);\n"
+                                               "border-bottom: 3px solid rgb(15, 110, 130);\n"
+                                               "border-left: 2px solid rgb(15, 150, 180);\n"
+                                               "color: rgb(255, 255, 255);\n"
+                                               "border-radius: 4px;}");
+    }
+}
+
 void View::slotModelToSmart(ModelInfo& model_info){
     model_info_ = model_info;
     startSmartCalculator_SignalFromModel();
+}
+
+void View::slotModelToCredit(ModelInfo& model_info) {
+    model_info_ = model_info;
+    startCreditCalculator_SignalFromModel();
 }
 
 void View::on_actionOpen_project_triggered()

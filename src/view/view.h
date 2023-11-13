@@ -13,6 +13,7 @@
 #include <QPalette>
 #include <QRect>
 #include <QRegion>
+#include <QStandardItemModel>
 #include "qlabelhorizontal.h"
 #include "LineEditClickFilter.h"
 #include "../structures.h"
@@ -32,39 +33,66 @@ public:
     ~View();
 
     void setTheme();
-    void buildGraph();
 
 public slots:
-    void slotModelToSmart(ModelInfo &model_info);
+    void buildGraph();
+
+    void slotModelToSmart(ModelInfo& model_info);
+    void slotModelToCredit(ModelInfo& model_info);
 
 private slots:
-    void startSmartCalculator_SignalToModel();
-    void printInLineEdit(QAbstractButton *button_pressed);
     void toggleNotationLabel();
+    void toggleAnnuity();
+    void toggleDeferred();
+    void printInLineEdit(QAbstractButton *button_pressed);
+
+    void startSmartCalculator_SignalToModel();
+    void startCreditCalculator_SignalToModel();
     void on_actionOpen_project_triggered();
     void on_actionOpen_project_2_triggered();
     void on_actionOpen_project_3_triggered();
 
 signals:
-    void signalSmartToModel(ViewInfo &view_info);
+    void signalSmartToModel(ViewInfo& view_info);
+    void signalCreditToModel(ViewInfo& view_info_);
+
 
 private:
-    void startSmartCalculator_SignalFromModel();
-    void setGraphInfo();
     void connectAll();
+    void startSmartCalculator_SignalFromModel();
+    void startCreditCalculator_SignalFromModel();
 
-    bool no_error_ = true; // qt toInt() sets it to false if error occurs;
-    size_t line_edit_index_ = 0;
-    bool toggle_notation_ = false;
+    //SmartCalc:
+
+    void setGraphInfo();
+    void cleanSmartLabelsAndGraphs();
+
+    //CreditCalc:
+
+    void cleanCreditLabels();
+
     Ui::View *ui;
     ViewInfo view_info_;
     ModelInfo model_info_;
+
+    //SmartCalc:
+
+    LineEditClickFilter *line_edit_filter_;
+    QPen    graph_pen_;
+    bool error_ = false;
+    bool toggle_notation_ = false;
+    size_t line_edit_index_ = 0;
     std::vector<QString> generic_tokens_ = {".", "0", "1", "2", "3", "4", "5", "6", "7", "8",
                                             "9", "+", "-", "×", "÷", "(", ")"};
     std::vector<QString> bracket_tokens_ = {"^", "√", "ln", "log", "mod", "sin", "asin",
                                             "cos", "acos", "tan", "atan"};
     std::vector<QString> special_tokens_ = {"X", "e", "π", "AC", "←"};
-    LineEditClickFilter *line_edit_filter_;
+
+    //CreditCalc:
+
+    QStandardItemModel *credit_table_ = {nullptr};
+    bool toggle_annuity_ = false;
+    bool toggle_deferred_ = false;
 };
 
 }  // namespace s21

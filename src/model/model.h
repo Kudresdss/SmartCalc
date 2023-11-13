@@ -17,23 +17,26 @@ public:
 
     double getResult();
     string getStatus();
-//    void getModelInfoSmartCalc(const string input_string, const string x_string_value);
 
     Model(Model const&) = delete;
     Model& operator=(Model const&) = delete;
 
 public slots:
     void slotSmartToModel(const ViewInfo& view_info);
+    void slotCreditToModel(const ViewInfo& view_info);
 
 signals:
     void signalModelToSmart(ModelInfo& model_info);
+    void signalModelToCredit(ModelInfo& model_info);
 
 private:
     Model() = default;
     ~Model() = default;
 
-    void startSmartCalc(const ViewInfo& view_info, ModelInfo& model_info);
-    void manageInputString(const ViewInfo& view_info);
+    //SmartCalc:
+
+    void startSmartCalc(ModelInfo& model_info);
+    void manageInputString();
     void makeTokens(vector_node& tokens);
     void makeFunctionTokens(vector_node& tokens, Node& current_token, const string& token_str, size_t& index);
     string makeNumString(const string& str, size_t &index) noexcept;
@@ -46,19 +49,31 @@ private:
     void checkTokensLoop(vector_node& tokens, const Node& multiply, const Node& minus_one);
     string checkTokenIdentity(const Node& token) noexcept;
     void rearrangeIntoPostfixNotation(const vector_node& tokens) noexcept;
-    void calculateXGraph(const ViewInfo& view_info, ModelInfo& model_info);
-    double evaluatePostfixNotation(ModelInfo& model_info, const vector_node& tokens);
-    void evaluatePostfixNotationForX(const ViewInfo& view_info, ModelInfo& model_info);
+    void calculateGraph(ModelInfo& model_info);
+    double evaluatePostfixNotation(const vector_node& tokens);
     void turnTokensToLabel(ModelInfo& model_info) noexcept;
     void handleRuntimeExceptions(const string& exception);
 
+    //CreditCalc:
+
+    void startCreditCalc(ModelInfo& model_info);
+    void calculateAnnuity();
+    void calculateDeferred();
+
+    ViewInfo view_info_;
+    ModelInfo model_info_;
+
+    //SmartCalc:
+
     bool   error_ = false;
+    bool   graph_mode_ = false;
+    bool   new_input_str_ = false;
+    bool   x_string_calculate_ = false;
     double result_ = 0;
     string input_str_;
+    string old_main_input_str_;
+    string old_x_input_str_;
     string output_status_;
-    bool   new_str_ = false;
-    bool   graph_mode_ = false;
-    bool   x_string_calculate_ = false;
     vector_node tokens_ = {};
     vector_node x_tokens_ = {};
     std::vector<char> functional_tokens_ = {'+', '-', '*', '/', '^', '(', ')', 'e', 'x'};
@@ -69,6 +84,26 @@ private:
             {"+", 1},    {"-", 1},   {"*", 2},   {"/", 2},    {"mod", 2},
             {"sin", 3},  {"cos", 3}, {"tan", 3}, {"atan", 3}, {"acos", 3},
             {"asin", 3}, {"ln", 3},  {"log", 3}, {"√", 3}, {"^", 4}};
+
+    //CreditCalc:
+
+    long double **credit_table_;
+    long double loan_amount_ = 0;
+    unsigned int loan_term_ = 0;
+    unsigned int interest_rate_ = 0;
+
+    class CreditTable {
+
+    public:
+        explicit CreditTable(unsigned int number_of_payments);
+        ~CreditTable();
+
+        long double** getCreditTable() { return credit_table_; };
+
+    private:
+        long double **credit_table_{nullptr};
+        unsigned int number_of_payments_;
+    };
 };
 
 }  // namespace s21

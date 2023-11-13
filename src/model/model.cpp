@@ -7,57 +7,75 @@ Model& Model::getInstance() {
     return instance;
 }
 
+//SmartCalc:
+
 double Model::getResult() { return result_; }
 
 std::string Model::getStatus() { return output_status_; }
 
 void Model::slotSmartToModel(const ViewInfo& view_info) {
-    ModelInfo model_info;
+    ModelInfo model_info_main_input;
+    ModelInfo model_info_x_input;
 
-    startSmartCalc(view_info, model_info);
-    emit signalModelToSmart(model_info);
+    view_info_ = view_info;
+    error_ = false;
+    if (view_info_.x_input_exists) {
+        x_string_calculate_ = true;
+        manageInputString();
+        startSmartCalc(model_info_x_input);
+        model_info_main_input.x_input_value = model_info_x_input.result;
+        model_info_main_input.x_label_tokens = "X: " + model_info_x_input.label_tokens;
+        model_info_main_input.graph_mode = true;
+        model_info_main_input.error = model_info_x_input.error;
+        graph_mode_ = true;
+        x_string_calculate_ = false;
+    }
+    if (!error_) {
+        manageInputString();
+        startSmartCalc(model_info_main_input);
+    }
+    model_info_main_input.label_tokens = "[]: " + model_info_main_input.label_tokens;
+    emit signalModelToSmart(model_info_main_input);
 }
 
-void Model::startSmartCalc(const ViewInfo& view_info, ModelInfo& model_info) {
+void Model::manageInputString() {
+    string str;
+
+    if (x_string_calculate_)
+        str = view_info_.x_input;
+    else
+        str = view_info_.main_input;
+
+    str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
+    if ((old_main_input_str_ != str && !x_string_calculate_) || (old_x_input_str_ != str && x_string_calculate_)) {
+        input_str_ = str;
+        new_input_str_ = true;
+    } else
+        new_input_str_ = false;
+}
+
+void Model::startSmartCalc(ModelInfo& model_info) {
     vector_node tokens;
 
-    manageInputString(view_info);
+    model_info_ = model_info;
     try {
-        if (new_str_ || error_) {
+        if (new_input_str_) {
             makeTokens(tokens);
             checkTokens(tokens);
             rearrangeIntoPostfixNotation(tokens);
+            if (graph_mode_)
+                calculateGraph(model_info);
+            model_info.result = evaluatePostfixNotation(tokens_);
+            turnTokensToLabel(model_info);
+            result_ = model_info.result;
+            output_status_ = model_info.label_tokens;
         }
-        if (graph_mode_ && !x_string_calculate_) {
-            calculateXGraph(view_info, model_info);
-            evaluatePostfixNotationForX(view_info, model_info);
-        } else
-            model_info.result = evaluatePostfixNotation(model_info, tokens_);
-        turnTokensToLabel(model_info);
-        result_ = model_info.result;
-        output_status_ = model_info.label_tokens;
     }
     catch (const std::exception& error) {
         string error_str = "Runtime error: ";
         model_info.error = error_str + error.what();
+        error_ = true;
     }
-}
-
-void Model::manageInputString(const ViewInfo& view_info) {
-    string str;
-
-    if (!x_string_calculate_)
-        str = view_info.input_string;
-    else
-        str = view_info.x_string;
-
-    str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
-    if (input_str_ != str || x_string_calculate_) {
-        input_str_ = str;
-        new_str_ = true;
-    }
-    else
-        new_str_ = false;
 }
 
 void Model::makeTokens(vector_node& tokens) {
@@ -75,15 +93,8 @@ void Model::makeTokens(vector_node& tokens) {
         } else {
             if (!current_token.name.empty()) cleanToken(current_token);
             if (std::any_of(functional_tokens_.begin(), functional_tokens_.end(),
-                            [c](char func_token){return func_token == c;})) {
-                if (c == 'x') {
-                    graph_mode_ = true;
-                    if (x_string_calculate_)
-                        handleRuntimeExceptions("invalid expression: can't calculate x value"
-                                                        " recursively out of itself");
-                }
+                            [c](char func_token){return func_token == c;}))
                 buildTokens(tokens, current_token, string(1, c), i);
-            }
             else makeFunctionTokens(tokens, current_token, str, i);
         }
         cleanToken(current_token);
@@ -181,7 +192,7 @@ void Model::checkTokens(vector_node& tokens) {
     };
 
     if (tokens.empty())
-        handleRuntimeExceptions("empty input");
+        handleRuntimeExceptions("can't convert input into tokens");
     if (tokens.size() > 1 && tokens[0].name == "+") tokens.erase(tokens.begin());
     if (tokens[0].name == "-") {
         tokens[0] = minus_one;
@@ -217,7 +228,7 @@ void Model::checkTokensLoop(vector_node& tokens, const Node& multiply, const Nod
         if (i + 1 < tokens.size()) {
             if ((tokens[i].priority == -1 && tokens[i + 1].priority == -1) ||
                    (tokens[i].name == "x" && tokens[i + 1].name == "x")) {
-                handleRuntimeExceptions("implementation choice: can't yet process multiplication by constants"
+                handleRuntimeExceptions("implementation choice: can't yet process multiplication by literals"
                                         " without a corresponding function token");
             } else if (tokens[i].name == ")" && tokens[i + 1].name == "(") {
                 func_token_insert_multiply(1);
@@ -285,8 +296,8 @@ void Model::rearrangeIntoPostfixNotation(const vector_node& tokens) noexcept {
     tokens_ = result;
 }
 
-void Model::calculateXGraph(const ViewInfo& view_info, ModelInfo& model_info) {
-    const ViewInfo& v = view_info;
+void Model::calculateGraph(ModelInfo& model_info) {
+    const ViewInfo& v = view_info_;
     ModelInfo& m = model_info;
     vector_node x_tokens = tokens_;
     std::vector<double> x_temp;
@@ -304,7 +315,7 @@ void Model::calculateXGraph(const ViewInfo& view_info, ModelInfo& model_info) {
             }
         }
         try {
-            m.y_result = evaluatePostfixNotation(model_info, x_tokens);
+            m.y_result = evaluatePostfixNotation(x_tokens);
             if (m.y_result < v.y_min || m.y_result > v.y_max)
                 handleRuntimeExceptions("y coordinate is out of bounds");
             x_temp.push_back(x_val);
@@ -318,11 +329,15 @@ void Model::calculateXGraph(const ViewInfo& view_info, ModelInfo& model_info) {
         }
     }
     if (!x_temp.empty()) func_push_x_y_temp();
-    m.graph_mode = true;
 }
 
-double Model::evaluatePostfixNotation(ModelInfo& model_info, const vector_node& tokens) {
+double Model::evaluatePostfixNotation(const vector_node& tokens) {
     std::stack<double> numbers;
+
+    if (graph_mode_){
+        for (Node& x_token : tokens_)
+            if (x_token.name == "x") x_token.value = model_info_.x_input_value;
+    }
 
     for (const Node& token_iter : tokens) {
         if (token_iter.priority == -1) {
@@ -390,46 +405,93 @@ double Model::evaluatePostfixNotation(ModelInfo& model_info, const vector_node& 
     return numbers.top();
 }
 
-void Model::evaluatePostfixNotationForX(const ViewInfo& view_info, ModelInfo& model_info) {
-    ModelInfo x_model_info;
-    vector_node tokens_before_x_calculate = tokens_;
-
-    x_string_calculate_ = true;
-    startSmartCalc(view_info, x_model_info);
-    x_string_calculate_ = false;
-
-    x_tokens_ = tokens_;
-    tokens_ = tokens_before_x_calculate;
-    if (!x_model_info.error.empty())
-        throw std::runtime_error(x_model_info.error.replace(0, 15, ""));
-
-    model_info.x_input_value = x_model_info.result;;
-    for (Node& x_token : tokens_before_x_calculate)
-        if (x_token.name == "x") x_token.value = x_model_info.result;
-    model_info.result = evaluatePostfixNotation(model_info, tokens_before_x_calculate);
-}
-
 void Model::turnTokensToLabel(ModelInfo& model_info) noexcept {
     string label;
 
-    auto func_tokens_to_label = [&label](vector_node &tokens) -> string {
-        for (const Node& token_iter : tokens) {
-            if (!label.empty())
-                label += " ";
-            label += token_iter.name;
-        }
-        return label;
-    };
-
-    model_info.label_tokens = "[]: " + func_tokens_to_label(tokens_);
-    label = "";
-    if (!x_tokens_.empty())
-        model_info.label_x_tokens = "X: " + func_tokens_to_label(x_tokens_);
+    for (const Node& token_iter : tokens_) {
+        if (!label.empty())
+            label += " ";
+        label += token_iter.name;
+    }
+    model_info.label_tokens = label;
 }
 
 void Model::handleRuntimeExceptions(const string& exception) {
     error_ = true;
     throw std::runtime_error(exception);
+}
+
+//CreditCalc:
+
+void Model::slotCreditToModel(const ViewInfo& view_info) {
+    ModelInfo model_info;
+
+    error_ = false;
+    startCreditCalc(model_info);
+
+    emit signalModelToSmart(model_info_);
+}
+
+void Model::startCreditCalc(ModelInfo& model_info) {
+    CreditTable credit_table(view_info_.loan_term);
+    credit_table_ = credit_table.getCreditTable();
+    model_info_ = model_info;
+
+
+    loan_amount_ = static_cast<long double>(view_info_.loan_amount);
+    loan_term_ = view_info_.loan_term;
+    interest_rate_ = view_info_.interest_rate;
+
+    if (view_info_.annuity)
+        calculateAnnuity();
+    else if (view_info_.deferred)
+        calculateDeferred();
+}
+
+void Model::calculateAnnuity() {
+     long double monthly_interest_rate = interest_rate_ / static_cast<long double>(100 * 12);
+     long double annuity_factor =
+             monthly_interest_rate * pow(monthly_interest_rate + 1, loan_term_) /
+                     (pow(monthly_interest_rate + 1, loan_term_) - 1);
+     long double monthly_payment = std::round(annuity_factor * loan_amount_ * 100) / 100;
+
+     for (unsigned int i = 0; i < loan_term_; ++i) {
+         long double beginning_balance = loan_amount_;
+         long double monthly_interest = loan_amount_ * monthly_interest_rate;
+         long double principal = monthly_payment - loan_amount_ * monthly_interest_rate;
+         loan_amount_ -= principal;
+         long double ending_balance = loan_amount_;
+
+         credit_table_[i][0] = i;
+         credit_table_[i][1] = beginning_balance;
+         credit_table_[i][2] = monthly_payment;
+         credit_table_[i][3] = monthly_interest;
+         credit_table_[i][4] = principal;
+         credit_table_[i][5] = ending_balance;
+     }
+}
+
+void Model::calculateDeferred() {
+
+}
+
+//CreditCalc - CreditTable embedded class:
+
+Model::CreditTable::CreditTable(const unsigned int number_of_payments) {
+    number_of_payments_ = number_of_payments;
+    credit_table_ = new long double*[number_of_payments]();
+    for (size_t i = 0; i < number_of_payments; ++i)
+        credit_table_[i] = new long double[6]();
+}
+
+Model::CreditTable::~CreditTable() {
+    if (credit_table_ != nullptr) {
+        for (size_t i = 0; i < number_of_payments_; ++i)
+            delete[] credit_table_[i];
+        delete[] credit_table_;
+    }
+    credit_table_ = nullptr;
+    number_of_payments_ = 0;
 }
 
 }  // namespace s21
