@@ -6,7 +6,6 @@ install:
 	bash install.sh
 
 uninstall: clean
-	rm -rf build
 	rm -rf $(APP_NAME)
 	rm -rf $(APP_NAME).tar.gz
 
