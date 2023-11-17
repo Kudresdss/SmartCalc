@@ -10,14 +10,14 @@ uninstall: clean
 	rm -rf $(APP_NAME).tar.gz
 
 clean:
-	rm -rf build
+	rm -rf smart_calculator
 	#rm -rf coverage*
 
-#dvi:
-#	open README.md
+dvi:
+	open ../README.md
 
 dist: install
-	tar -czf $(APP_NAME).tar.gz --directory=build/ .
+	tar -czf $(APP_NAME).tar.gz --directory=smart_calculator/ .
 
 launch:
 	./$(APP_NAME)

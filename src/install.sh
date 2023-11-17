@@ -5,11 +5,11 @@ echo "Введите директорию для установки прилож
 read DIR
 
 if [ "$DIR" == "" ]; then
-    cmake -B build
-    make -C build
-    cp build/SmartCalculator.app/Contents/MacOs/SmartCalculator SmartCalculator
+    cmake -B smart_calculator
+    make -C smart_calculator
+    cp smart_calculator/SmartCalculator.app/Contents/MacOs/SmartCalculator SmartCalculator
 else
-    cmake -B $DIR/build
-    make -C $DIR/build
-    cp $DIR/build build/SmartCalculator.app/Contents/MacOs/SmartCalculator SmartCalculator
+    cmake -B $DIR/smart_calculator
+    make -C $DIR/smart_calculator
+    cp $DIR/smart_calculator/SmartCalculator.app/Contents/MacOs/SmartCalculator SmartCalculator
 fi
