@@ -426,17 +426,17 @@ void Model::handleRuntimeExceptions(const string& exception) {
 void Model::slotCreditToModel(const ViewInfo& view_info) {
     ModelInfo model_info;
 
+    view_info_ = view_info;
+    model_info_ = model_info;
     error_ = false;
-    startCreditCalc(model_info);
 
-    emit signalModelToSmart(model_info_);
+    startCreditCalc();
+    emit signalModelToCredit(model_info_);
 }
 
-void Model::startCreditCalc(ModelInfo& model_info) {
-    CreditTable credit_table(view_info_.loan_term);
-    credit_table_ = credit_table.getCreditTable();
-    model_info_ = model_info;
-
+void Model::startCreditCalc() {
+    std::vector<std::vector<long double>> credit_table(view_info_.loan_term, std::vector<long double>(5, 0));
+    model_info_.credit_table = credit_table;
 
     loan_amount_ = static_cast<long double>(view_info_.loan_amount);
     loan_term_ = view_info_.loan_term;
@@ -444,54 +444,57 @@ void Model::startCreditCalc(ModelInfo& model_info) {
 
     if (view_info_.annuity)
         calculateAnnuity();
-    else if (view_info_.deferred)
-        calculateDeferred();
+    else if (view_info_.differentiated)
+        calculateDifferentiated();
+    if (model_info_.credit_table[loan_term_ - 1][4] < 1)
+        model_info_.credit_table[loan_term_ - 1][4] = 0;
 }
 
 void Model::calculateAnnuity() {
-     long double monthly_interest_rate = interest_rate_ / static_cast<long double>(100 * 12);
-     long double annuity_factor =
-             monthly_interest_rate * pow(monthly_interest_rate + 1, loan_term_) /
-                     (pow(monthly_interest_rate + 1, loan_term_) - 1);
-     long double monthly_payment = std::round(annuity_factor * loan_amount_ * 100) / 100;
+    long double monthly_interest_rate = interest_rate_ / static_cast<long double>(100 * 12);
+    long double annuity_factor =
+            monthly_interest_rate * pow(monthly_interest_rate + 1, loan_term_) /
+            (pow(monthly_interest_rate + 1, loan_term_) - 1);
+    long double monthly_payment = std::round(annuity_factor * loan_amount_ * 100) / 100;
 
-     for (unsigned int i = 0; i < loan_term_; ++i) {
-         long double beginning_balance = loan_amount_;
-         long double monthly_interest = loan_amount_ * monthly_interest_rate;
-         long double principal = monthly_payment - loan_amount_ * monthly_interest_rate;
-         loan_amount_ -= principal;
-         long double ending_balance = loan_amount_;
+    for (unsigned int i = 0; i < loan_term_; ++i) {
+        long double beginning_balance = loan_amount_;
+        long double interest = loan_amount_ * monthly_interest_rate;
+        long double principal = monthly_payment - loan_amount_ * monthly_interest_rate;
+        loan_amount_ -= principal;
+        long double ending_balance = loan_amount_;
 
-         credit_table_[i][0] = i;
-         credit_table_[i][1] = beginning_balance;
-         credit_table_[i][2] = monthly_payment;
-         credit_table_[i][3] = monthly_interest;
-         credit_table_[i][4] = principal;
-         credit_table_[i][5] = ending_balance;
-     }
-}
+        model_info_.total_interest += interest;
+        model_info_.total_payment += monthly_payment;
 
-void Model::calculateDeferred() {
-
-}
-
-//CreditCalc - CreditTable embedded class:
-
-Model::CreditTable::CreditTable(const unsigned int number_of_payments) {
-    number_of_payments_ = number_of_payments;
-    credit_table_ = new long double*[number_of_payments]();
-    for (size_t i = 0; i < number_of_payments; ++i)
-        credit_table_[i] = new long double[6]();
-}
-
-Model::CreditTable::~CreditTable() {
-    if (credit_table_ != nullptr) {
-        for (size_t i = 0; i < number_of_payments_; ++i)
-            delete[] credit_table_[i];
-        delete[] credit_table_;
+        model_info_.credit_table[i][0] = beginning_balance;
+        model_info_.credit_table[i][1] = monthly_payment;
+        model_info_.credit_table[i][2] = interest;
+        model_info_.credit_table[i][3] = principal;
+        model_info_.credit_table[i][4] = ending_balance;
     }
-    credit_table_ = nullptr;
-    number_of_payments_ = 0;
+}
+
+void Model::calculateDifferentiated() {
+    long double monthly_principal = loan_amount_ / loan_term_;
+    long double monthly_interest_rate = interest_rate_ / static_cast<long double>(100 * 12);
+
+    for (unsigned int i = 0; i < loan_term_; ++i) {
+        long double beginning_balance = loan_amount_;
+        long double interest = loan_amount_ * monthly_interest_rate;
+        long double monthly_payment = interest + monthly_principal;
+        loan_amount_ -= monthly_principal;
+        long double ending_balance = loan_amount_;
+
+        model_info_.total_interest += interest;
+        model_info_.total_payment += monthly_payment;
+
+        model_info_.credit_table[i][0] = beginning_balance;
+        model_info_.credit_table[i][1] = monthly_payment;
+        model_info_.credit_table[i][2] = interest;
+        model_info_.credit_table[i][3] = monthly_principal;
+        model_info_.credit_table[i][4] = ending_balance;
+    }
 }
 
 }  // namespace s21

@@ -177,9 +177,7 @@ void View::printInLineEdit(QAbstractButton* button_pressed) {
 
     int key_type = func_determine_key_type();
     if (key_type == 1) {
-        if (key_pressed == "×")
-            input_text = "*";
-        else if (key_pressed == "÷")
+        if (key_pressed == "÷")
             input_text = "/";
         else
             input_text = key_pressed;
@@ -218,9 +216,6 @@ void View::printInLineEdit(QAbstractButton* button_pressed) {
 
 //CreditCalc:
 
-void View::cleanCreditLabels() {
-}
-
 void View::startCreditCalculator_SignalToModel() {
     ViewInfo new_view_info;
     bool no_error_ = true;
@@ -233,49 +228,43 @@ void View::startCreditCalculator_SignalToModel() {
     view_info_ = new_view_info;
     ui->statusbar->showMessage("");
     view_info_.annuity = toggle_annuity_;
-    view_info_.deferred = toggle_deferred_;
-    if (!toggle_annuity_ || !toggle_deferred_) {
-        ui->statusbar->showMessage("Chose repayment type");
-        cleanCreditLabels();
+    view_info_.differentiated = toggle_differentiated_;
+
+    if (!toggle_annuity_ && !toggle_differentiated_) {
+        ui->statusbar->showMessage("Choose repayment type");
         return;
     }
 
     if (ui->lineEdit_loan_amount->text().isEmpty()) {
         ui->statusbar->showMessage("Loan amount is empty");
-        cleanCreditLabels();
         return;
     }
     else {
         view_info_.loan_amount = ui->lineEdit_loan_amount->text().toULong(&no_error_);
         if (!no_error_ || view_info_.loan_amount > 1000000000000) {
             ui->statusbar->showMessage("Incorrect loan amount value");
-            cleanCreditLabels();
             return;
         }
     }
     if (ui->lineEdit_loan_term->text().isEmpty()) {
         ui->statusbar->showMessage("Loan term is empty");
-        cleanCreditLabels();
         return;
     }
     else {
         view_info_.loan_term = ui->lineEdit_loan_term->text().toUInt(&no_error_);
-        if (!no_error_ || (1 <= view_info_.loan_term && view_info_.loan_term > 1000)) {
+        if (!no_error_ || (view_info_.loan_term < 1 || view_info_.loan_term > 1000)) {
             ui->statusbar->showMessage("Incorrect loan term value");
-            cleanCreditLabels();
             return;
         }
     }
     if (ui->lineEdit_interest_rate->text().isEmpty()) {
         ui->statusbar->showMessage("Interest rate is empty");
-        cleanCreditLabels();
         return;
     }
     else {
         view_info_.interest_rate = ui->lineEdit_interest_rate->text().toUInt(&no_error_);
         if (!no_error_ || view_info_.interest_rate > 100) {
             ui->statusbar->showMessage("Incorrect interest rate value");
-            cleanCreditLabels();
             return;
         }
     }
@@ -286,7 +275,39 @@ void View::startCreditCalculator_SignalToModel() {
 }
 
 void View::startCreditCalculator_SignalFromModel() {
-    
+    ui->label_total_interest_result->setText(QString::number(model_info_.total_interest, 'd', 2));
+    ui->label_total_payment_result->setText(QString::number(model_info_.total_payment, 'd', 2));
+    buildCreditTable();
+}
+
+void View::buildCreditTable() {
+    credit_table_ = new QStandardItemModel(view_info_.loan_term, 5, this);
+    credit_table_->setHorizontalHeaderLabels(QStringList()  << "Beginning balance" << "Monthly payment" <<
+                                                            "Interest" << "Principal" << "Ending balance");
+    ui->tableView_payment->setModel(credit_table_);
+    ui->tableView_payment->setColumnWidth(0, 130);
+    ui->tableView_payment->setColumnWidth(1, 125);
+    ui->tableView_payment->setColumnWidth(2, 125);
+    ui->tableView_payment->setColumnWidth(3, 125);
+    ui->tableView_payment->setColumnWidth(4, 130);
+    QModelIndex index[5];
+
+    for (int i = 0; i < view_info_.loan_term; ++i) {
+        index[0] = credit_table_->index(i, 0);
+        credit_table_->setData(index[0], QString::number(model_info_.credit_table[i][0], 'd', 2), 0);
+
+        index[1] = credit_table_->index(i, 1);
+        credit_table_->setData(index[1], QString::number(model_info_.credit_table[i][1], 'd', 2), 0);
+
+        index[2] = credit_table_->index(i, 2);
+        credit_table_->setData(index[2], QString::number(model_info_.credit_table[i][2], 'd', 2), 0);
+
+        index[3] = credit_table_->index(i, 3);
+        credit_table_->setData(index[3], QString::number(model_info_.credit_table[i][3], 'd', 2), 0);
+
+        index[4] = credit_table_->index(i, 4);
+        credit_table_->setData(index[4], QString::number(model_info_.credit_table[i][4], 'd', 2), 0);
+    }
 }
 
 //General or purely visual style methods:
@@ -306,7 +327,7 @@ void View::setTheme() {
     ui->customPlot->setInteraction(QCP::iRangeDrag, true);
 
     ui->gridLayout_loan->setAlignment(ui->pushButton_annuity, Qt::AlignHCenter);
-    ui->gridLayout_loan->setAlignment(ui->pushButton_deferred, Qt::AlignHCenter);
+    ui->gridLayout_loan->setAlignment(ui->pushButton_differentiated, Qt::AlignHCenter);
     ui->gridLayout_loan->setAlignment(ui->pushButton_calculate, Qt::AlignHCenter);
 }
 
@@ -315,6 +336,7 @@ void View::connectAll() {
 
     connect(ui->pushButton_equals, SIGNAL(clicked()), this, SLOT(startSmartCalculator_SignalToModel()));
     connect(ui->lineEdit_input, SIGNAL(returnPressed()), this, SLOT(startSmartCalculator_SignalToModel()));
+    connect(ui->pushButton_calculate, SIGNAL(clicked()), this, SLOT(startCreditCalculator_SignalToModel()));
 
     connect(line_edit_filter_, &LineEditClickFilter::signalLineEdit_Input, this, [this]() {line_edit_index_=1;});
     connect(line_edit_filter_, &LineEditClickFilter::signalLineEdit_X, this, [this]() {line_edit_index_=2;});
@@ -328,7 +350,7 @@ void View::connectAll() {
 
     connect(ui->pushButton_notation, SIGNAL(clicked()), this, SLOT(toggleNotationLabel()));
     connect(ui->pushButton_annuity, SIGNAL(clicked()), this, SLOT(toggleAnnuity()));
-    connect(ui->pushButton_deferred, SIGNAL(clicked()), this, SLOT(toggleDeferred()));
+    connect(ui->pushButton_differentiated, SIGNAL(clicked()), this, SLOT(toggleDifferentiated()));
 
 }
 
@@ -362,8 +384,8 @@ void View::toggleNotationLabel() {
 void View::toggleAnnuity() {
     toggle_annuity_ = !toggle_annuity_;
     if (toggle_annuity_) {
-        if (toggle_deferred_)
-            toggleDeferred();
+        if (toggle_differentiated_)
+            toggleDifferentiated();
         ui->pushButton_annuity->setStyleSheet("QPushButton {\n"
                                               "background-color: rgb(15, 195, 227);\n"
                                               "border-bottom: 3px solid rgb(15, 110, 130);\n"
@@ -387,12 +409,12 @@ void View::toggleAnnuity() {
     }
 }
 
-void View::toggleDeferred() {
-    toggle_deferred_ = !toggle_deferred_;
-    if (toggle_deferred_) {
+void View::toggleDifferentiated() {
+    toggle_differentiated_ = !toggle_differentiated_;
+    if (toggle_differentiated_) {
         if (toggle_annuity_)
             toggleAnnuity();
-        ui->pushButton_deferred->setStyleSheet("QPushButton {\n"
+        ui->pushButton_differentiated->setStyleSheet("QPushButton {\n"
                                                "background-color: rgb(15, 195, 227);\n"
                                                "border-bottom: 3px solid rgb(15, 110, 130);\n"
                                                "border-left: 2px solid rgb(15, 150, 180);\n"
@@ -406,7 +428,7 @@ void View::toggleDeferred() {
                                                "border-radius: 4px;}");
     }
     else {
-        ui->pushButton_deferred->setStyleSheet("QPushButton:hover {\n"
+        ui->pushButton_differentiated->setStyleSheet("QPushButton:hover {\n"
                                                "background-color: rgb(15, 195, 227);\n"
                                                "border-bottom: 3px solid rgb(15, 110, 130);\n"
                                                "border-left: 2px solid rgb(15, 150, 180);\n"

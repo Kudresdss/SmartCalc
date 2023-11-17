@@ -107,7 +107,7 @@ border: 2px solid rgb(8, 150, 170);
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page_1">
        <property name="sizePolicy">
@@ -850,8 +850,14 @@ border: 4px ridge rgb(40, 150, 170);
               <height>40</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Lucida Grande</family>
+              <pointsize>15</pointsize>
+             </font>
+            </property>
             <property name="text">
-             <string>×</string>
+             <string>*</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">buttonGroup_print</string>
@@ -2177,7 +2183,12 @@ margin-bottom: 10px;
        <property name="styleSheet">
         <string notr="true">QLabel {
 background-color: white;
-border: 2px solid rgb(8, 150, 170);
+border: 3px double rgb(8, 150, 170);
+}
+
+QLineEdit {
+background-color: white;
+border: 3px double rgb(8, 150, 170);
 }</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -2189,18 +2200,21 @@ border: 2px solid rgb(8, 150, 170);
           <property name="rightMargin">
            <number>7</number>
           </property>
+          <property name="bottomMargin">
+           <number>200</number>
+          </property>
           <item row="1" column="1">
            <widget class="QLabel" name="label_loan_amount">
             <property name="minimumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -2221,14 +2235,14 @@ border: 2px solid rgb(8, 150, 170);
             </property>
             <property name="minimumSize">
              <size>
-              <width>700</width>
-              <height>300</height>
+              <width>670</width>
+              <height>220</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>700</width>
-              <height>300</height>
+              <width>670</width>
+              <height>220</height>
              </size>
             </property>
            </widget>
@@ -2243,14 +2257,14 @@ border: 2px solid rgb(8, 150, 170);
             </property>
             <property name="minimumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="text">
@@ -2268,14 +2282,14 @@ border: 2px solid rgb(8, 150, 170);
             </property>
             <property name="minimumSize">
              <size>
-              <width>340</width>
-              <height>20</height>
+              <width>330</width>
+              <height>23</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>340</width>
-              <height>20</height>
+              <width>330</width>
+              <height>23</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -2310,19 +2324,20 @@ border-radius: 4px;
             </property>
             <property name="minimumSize">
              <size>
-              <width>700</width>
+              <width>670</width>
               <height>36</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>700</width>
+              <width>670</width>
               <height>30</height>
              </size>
             </property>
             <property name="styleSheet">
              <string notr="true">QLabel {
-margin-bottom: -10px;
+background-color: white;
+border: 3px outset rgb(20, 130, 140);
 }</string>
             </property>
             <property name="text">
@@ -2340,7 +2355,7 @@ margin-bottom: -10px;
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>70</width>
+              <width>80</width>
               <height>20</height>
              </size>
             </property>
@@ -2356,14 +2371,14 @@ margin-bottom: -10px;
             </property>
             <property name="minimumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="text">
@@ -2381,15 +2396,22 @@ margin-bottom: -10px;
             </property>
             <property name="minimumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+background-color: white;
+border: 2px solid rgb(8, 150, 170);
+}
+</string>
             </property>
             <property name="text">
              <string>Total payment</string>
@@ -2397,7 +2419,7 @@ margin-bottom: -10px;
            </widget>
           </item>
           <item row="4" column="2">
-           <widget class="QPushButton" name="pushButton_deferred">
+           <widget class="QPushButton" name="pushButton_differentiated">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -2406,14 +2428,14 @@ margin-bottom: -10px;
             </property>
             <property name="minimumSize">
              <size>
-              <width>340</width>
-              <height>20</height>
+              <width>330</width>
+              <height>23</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>340</width>
-              <height>20</height>
+              <width>330</width>
+              <height>23</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -2434,7 +2456,7 @@ border-radius: 4px;
 }</string>
             </property>
             <property name="text">
-             <string>deferred</string>
+             <string>differentiated</string>
             </property>
            </widget>
           </item>
@@ -2448,15 +2470,21 @@ border-radius: 4px;
             </property>
             <property name="minimumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+background-color: white;
+border: 2px solid rgb(8, 150, 170);
+}</string>
             </property>
             <property name="text">
              <string/>
@@ -2473,14 +2501,14 @@ border-radius: 4px;
             </property>
             <property name="minimumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="text">
@@ -2498,15 +2526,22 @@ border-radius: 4px;
             </property>
             <property name="minimumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+background-color: white;
+border: 2px solid rgb(8, 150, 170);
+}
+</string>
             </property>
             <property name="text">
              <string>Total interest</string>
@@ -2523,15 +2558,21 @@ border-radius: 4px;
             </property>
             <property name="minimumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+background-color: white;
+border: 2px solid rgb(8, 150, 170);
+}</string>
             </property>
             <property name="text">
              <string/>
@@ -2548,14 +2589,14 @@ border-radius: 4px;
             </property>
             <property name="minimumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="text">
@@ -2573,14 +2614,14 @@ border-radius: 4px;
             </property>
             <property name="minimumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>345</width>
-              <height>25</height>
+              <width>330</width>
+              <height>30</height>
              </size>
             </property>
             <property name="text">
@@ -2599,13 +2640,13 @@ border-radius: 4px;
             <property name="minimumSize">
              <size>
               <width>300</width>
-              <height>30</height>
+              <height>27</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>300</width>
-              <height>30</height>
+              <height>27</height>
              </size>
             </property>
             <property name="text">

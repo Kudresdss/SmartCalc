@@ -1,6 +1,7 @@
 #ifndef SMARTCALC1_STRUCTURES_H
 #define SMARTCALC1_STRUCTURES_H
 
+#include <iostream>
 #include <clocale>
 #include <algorithm>
 #include <initializer_list>
@@ -36,8 +37,8 @@ struct ViewInfo {
 
     // CreditCalc
 
-    bool annuity = 0;
-    bool deferred = 0;
+    bool annuity = false;
+    bool differentiated = false;
 
     unsigned long loan_amount = 0;
     unsigned int loan_term = 0;
@@ -53,14 +54,16 @@ struct ModelInfo {
     std::vector<std::vector<double>> x_coord = {};
     std::vector<std::vector<double>> y_coord = {};
 
-    bool graph_mode = 0;
+    bool graph_mode = false;
     double result = 0;
     double x_input_value;
     double y_result = 0;
 
     // CreditCalc
 
-    long double **credit_table;
+    long double total_interest = 0;
+    long double total_payment = 0;
+    std::vector<std::vector<long double>> credit_table = {};
 };
 
 #endif //SMARTCALC1_STRUCTURES_H

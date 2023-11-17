@@ -56,10 +56,11 @@ private:
 
     //CreditCalc:
 
-    void startCreditCalc(ModelInfo& model_info);
+    void startCreditCalc();
     void calculateAnnuity();
-    void calculateDeferred();
+    void calculateDifferentiated();
 
+private:
     ViewInfo view_info_;
     ModelInfo model_info_;
 
@@ -87,23 +88,9 @@ private:
 
     //CreditCalc:
 
-    long double **credit_table_;
     long double loan_amount_ = 0;
     unsigned int loan_term_ = 0;
     unsigned int interest_rate_ = 0;
-
-    class CreditTable {
-
-    public:
-        explicit CreditTable(unsigned int number_of_payments);
-        ~CreditTable();
-
-        long double** getCreditTable() { return credit_table_; };
-
-    private:
-        long double **credit_table_{nullptr};
-        unsigned int number_of_payments_;
-    };
 };
 
 }  // namespace s21
