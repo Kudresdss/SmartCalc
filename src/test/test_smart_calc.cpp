@@ -299,7 +299,7 @@ TEST(SMART_CALCULATOR_OPERATIONS, UNARY_OPERATIONS_LN) {
     ASSERT_NEAR(test_model_info.result, 1., 1e-7);
 }
 
-TEST(SMART_CALCULATOR_ERRORS, UNKNOWN_TOKEN) {
+TEST(SMART_CALCULATOR_TOKEN_ERRORS, UNKNOWN_TOKEN) {
     Model* test_model = &Model::getInstance();
     ViewInfo test_view_info = {
             "unknown token",
@@ -312,7 +312,7 @@ TEST(SMART_CALCULATOR_ERRORS, UNKNOWN_TOKEN) {
     ASSERT_EQ(test_model_info.error, "Runtime error: invalid expression: unknown token");
 }
 
-TEST(SMART_CALCULATOR_ERRORS, NUMBER_CONTAINS_MORE_THAN_ONE_DOT) {
+TEST(SMART_CALCULATOR_TOKEN_ERRORS, NUMBER_CONTAINS_MORE_THAN_ONE_DOT) {
     Model* test_model = &Model::getInstance();
     ViewInfo test_view_info = {
             "1.....2",
@@ -325,7 +325,7 @@ TEST(SMART_CALCULATOR_ERRORS, NUMBER_CONTAINS_MORE_THAN_ONE_DOT) {
     ASSERT_EQ(test_model_info.error, "Runtime error: invalid expression: number contains more than one dot");
 }
 
-TEST(SMART_CALCULATOR_ERRORS, BRACKETS_NOT_PAIRED) {
+TEST(SMART_CALCULATOR_BRACKET_ERRORS, BRACKETS_NOT_PAIRED) {
     Model* test_model = &Model::getInstance();
     ViewInfo test_view_info = {
             " (1)+ 2) ",
@@ -338,7 +338,20 @@ TEST(SMART_CALCULATOR_ERRORS, BRACKETS_NOT_PAIRED) {
     ASSERT_EQ(test_model_info.error, "Runtime error: incorrect usage of brackets: some brackets are not in pair");
 }
 
-TEST(SMART_CALCULATOR_ERRORS, OPENING_BRACKET_IN_THE_END) {
+TEST(SMART_CALCULATOR_BRACKET_ERRORS, EMPTY_BRACKETS) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "()",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error, "Runtime error: incorrect usage of brackets: empty brackets");
+}
+
+TEST(SMART_CALCULATOR_BRACKET_ERRORS, OPENING_BRACKET_IN_THE_END) {
     Model* test_model = &Model::getInstance();
     ViewInfo test_view_info = {
             "1) (",
@@ -351,7 +364,7 @@ TEST(SMART_CALCULATOR_ERRORS, OPENING_BRACKET_IN_THE_END) {
     ASSERT_EQ(test_model_info.error, "Runtime error: incorrect usage of brackets: opening bracket in the end of expression");
 }
 
-TEST(SMART_CALCULATOR_ERRORS, CLOSING_BRACKET_IN_THE_BEGINNING) {
+TEST(SMART_CALCULATOR_BRACKET_ERRORS, CLOSING_BRACKET_IN_THE_BEGINNING) {
     Model* test_model = &Model::getInstance();
     ViewInfo test_view_info = {
             ") 1( 1",
@@ -364,7 +377,7 @@ TEST(SMART_CALCULATOR_ERRORS, CLOSING_BRACKET_IN_THE_BEGINNING) {
     ASSERT_EQ(test_model_info.error, "Runtime error: incorrect usage of brackets: closing bracket in the beginning of expression");
 }
 
-TEST(SMART_CALCULATOR_ERRORS, BINARY_FUNCTION_IN_THE_BEGINNING) {
+TEST(SMART_CALCULATOR_EQUATION_CONSTRUCTION_ERRORS, BINARY_FUNCTION_IN_THE_BEGINNING) {
     Model* test_model = &Model::getInstance();
     ViewInfo test_view_info = {
             "^3",
@@ -377,7 +390,7 @@ TEST(SMART_CALCULATOR_ERRORS, BINARY_FUNCTION_IN_THE_BEGINNING) {
     ASSERT_EQ(test_model_info.error, "Runtime error: incorrect usage of functions: binary function in the beginning of expression");
 }
 
-TEST(SMART_CALCULATOR_ERRORS, BINARY_FUNCTION_IN_THE_END) {
+TEST(SMART_CALCULATOR_EQUATION_CONSTRUCTION_ERRORS, BINARY_FUNCTION_IN_THE_END) {
     Model* test_model = &Model::getInstance();
     ViewInfo test_view_info = {
             "1 +",
@@ -390,4 +403,145 @@ TEST(SMART_CALCULATOR_ERRORS, BINARY_FUNCTION_IN_THE_END) {
     ASSERT_EQ(test_model_info.error, "Runtime error: incorrect usage of functions: binary function in the end of expression");
 }
 
+TEST(SMART_CALCULATOR_EQUATION_CONSTRUCTION_ERRORS, UNARY_FUNCTION_IN_THE_END) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "1sin",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error, "Runtime error: incorrect usage of functions: unary function in the end of expression");
+}
 
+TEST(SMART_CALCULATOR_EQUATION_CONSTRUCTION_ERRORS, TWO_CONSECUTIVE_BINARY_FUNCTIONS) {
+Model* test_model = &Model::getInstance();
+ViewInfo test_view_info = {
+        "1^^2",
+        "",
+        true,
+        false,
+        false
+};
+ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+ASSERT_EQ(test_model_info.error, "Runtime error: incorrect usage of functions: two consecutive binary functions");
+}
+
+TEST(SMART_CALCULATOR_EQUATION_CONSTRUCTION_ERRORS, BINARY_FUNCTION_AFTER_AN_UNARY) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "sin mod",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error, "Runtime error: incorrect usage of functions: binary function after an unary function");
+}
+
+TEST(SMART_CALCULATOR_EQUATION_CONSTRUCTION_ERRORS, CERTAIN_MULTIPLICATION_WITHOUT_A_TOKEN) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "xx",
+            "1",
+            true,
+            true,
+            true
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error.empty(), 0);
+}
+
+TEST(SMART_CALCULATOR_INVALID_FUNCTION_INPUT_ERRORS, INVALID_ASIN_INPUT) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "asin(20)",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error, "Runtime error: invalid expression: asin of a number ∉ [-1;1]");
+}
+
+TEST(SMART_CALCULATOR_INVALID_FUNCTION_INPUT_ERRORS, INVALID_ACOS_INPUT) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "acos(20)",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error, "Runtime error: invalid expression: acos of a number ∉ [-1;1]");
+}
+
+TEST(SMART_CALCULATOR_INVALID_FUNCTION_INPUT_ERRORS, INVALID_LOG10_INPUT) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "log(0)",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error, "Runtime error: invalid expression: log of a number ∈ (-∞;0]");
+}
+
+TEST(SMART_CALCULATOR_INVALID_FUNCTION_INPUT_ERRORS, INVALID_LN_INPUT) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "ln(0)",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error, "Runtime error: invalid expression: ln of a number ∈ (-∞;0]");
+}
+
+TEST(SMART_CALCULATOR_INVALID_FUNCTION_INPUT_ERRORS, INVALID_SQRT_INPUT) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "√(-1)",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error, "Runtime error: invalid expression: square root of a negative number");
+}
+
+TEST(SMART_CALCULATOR_INVALID_FUNCTION_INPUT_ERRORS, DIVISION_BY_ZERO) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "1 / 0",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error, "Runtime error: invalid expression: division by zero");
+}
+
+TEST(SMART_CALCULATOR_INVALID_FUNCTION_INPUT_ERRORS, MODULUS_OF_DIVISION_BY_ZERO) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "1 mod 0",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(test_model_info.error, "Runtime error: invalid expression: modulus of division by zero");
+}

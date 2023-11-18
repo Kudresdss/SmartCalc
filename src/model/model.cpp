@@ -210,6 +210,8 @@ void Model::checkTokens(vector_node& tokens) {
         handleRuntimeExceptions("incorrect usage of brackets: opening bracket in the end of expression");
     else if (checkTokenIdentity(tokens[last_elem]) == "binary function")
         handleRuntimeExceptions("incorrect usage of functions: binary function in the end of expression");
+    else if (checkTokenIdentity(tokens[last_elem]) == "unary function")
+        handleRuntimeExceptions("incorrect usage of functions: unary function in the end of expression");
 }
 
 void Model::checkTokensLoop(vector_node& tokens, const Node& multiply, const Node& minus_one) {
