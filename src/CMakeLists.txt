@@ -13,17 +13,31 @@ set(CMAKE_PREFIX_PATH "/Users/Ivan/Qt/6.4.2/Src/qtbase/lib/cmake")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS PrintSupport)
-
 set(PROJECT_DIRS
         .
         model
         view
         controller
         qcustomplot
+        )
+
+set(TEST_DIRS
+        test
+        )
+
+set(TEST_EXECUTABLE run_test)
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS PrintSupport)
+find_package(GTest REQUIRED)
+
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/f8d7d77c06936315286eb55f8de22cd23c188571.zip
 )
+FetchContent_MakeAvailable(googletest)
 
 foreach(dir ${PROJECT_DIRS})
     file(GLOB CPP_SOURCES "${dir}/*.cpp")
@@ -32,23 +46,29 @@ foreach(dir ${PROJECT_DIRS})
     list(APPEND PROJECT_SOURCES ${CPP_SOURCES} ${HEADER_SOURCES} ${UI_SOURCES})
 endforeach()
 
+foreach(dir ${TEST_DIRS})
+    file(GLOB CPP_SOURCES "${dir}/*.cpp")
+    file(GLOB HEADER_SOURCES "${dir}/*.h")
+    list(APPEND TEST_SOURCES ${CPP_SOURCES} ${HEADER_SOURCES})
+endforeach()
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
             resources/fonts.qrc
     )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET SmartCalc1 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+    qt_add_executable(${TEST_EXECUTABLE}
+        MANUAL_FINALIZATION
+        model/model.cpp
+        model/model.h
+        ${TEST_SOURCES}
+    )
 else()
     if(ANDROID)
         add_library(${PROJECT_NAME} SHARED
             ${PROJECT_SOURCES}
         )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(${PROJECT_NAME}
             ${PROJECT_SOURCES})
@@ -56,6 +76,7 @@ else()
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/model)
+target_include_directories(${TEST_EXECUTABLE} PRIVATE ${CMAKE_SOURCE_DIR}/model)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/view)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/controller)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/qcustomplot)
@@ -63,7 +84,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/qcustompl
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::PrintSupport)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Gui)
+target_link_libraries(${TEST_EXECUTABLE} PRIVATE ${GTEST_LIBRARIES} pthread)
+#target_link_libraries(${TEST_EXECUTABLE} gtest)
 
+#include(GoogleTest)
+#gtest_discover_tests(test)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -79,4 +104,6 @@ install(TARGETS ${PROJECT_NAME}
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(${PROJECT_NAME})
+    qt_finalize_executable(${TEST_EXECUTABLE})
+
 endif()

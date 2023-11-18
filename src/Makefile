@@ -23,8 +23,8 @@ launch:
 	./$(APP_NAME)
 
 tests: install
-	make -C build tests
-	./build/tests
+	make -C smart_calculator run_test
+	./smart_calculator/run_test
 
 lcov: tests
 	make -C build coverage

@@ -16,6 +16,7 @@ bool LineEditClickFilter::eventFilter(QObject *obj, QEvent *event) {
     else {
         return QObject::eventFilter(obj, event);
     }
+    return false;
 }
 
 }  // namespace s21
