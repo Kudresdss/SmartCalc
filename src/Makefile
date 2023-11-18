@@ -26,6 +26,9 @@ launch:
 tests: install
 	make -C smart_calculator tests
 	leaks --atExit -q -- ./smart_calculator/tests
+#	rm smart_calculator/CMakeFiles/tests.dir/test/*.gcda
+#	rm smart_calculator/CMakeFiles/tests.dir/model/*.gcda
+#	rm smart_calculator/CMakeFiles/tests.dir/tests_autogen/*.gcda
 
 lcov: tests
 	make -C smart_calculator coverage

@@ -1,17 +1,29 @@
 #include "test_core.h"
 
-TEST(CREDIT_CALCULATOR, ANNUITY1) {
-//Model a = getInstance(a);
-//ViewInfo in;
-//in.credit_amount = "1000000";
-//in.term = "24";
-//in.interest_rate = "12";
-//
-//in.ann_dif = 0;
-//
-//CreditStructOut out = a.CalculateCredit(in);
-//EXPECT_FALSE(out.error);
-//ASSERT_NEAR(out.mounthly_paiment, 47073., 1);
-//ASSERT_NEAR(out.overpay, 129763., 1);
-//ASSERT_NEAR(out.total_payment, 1129763., 1);
+TEST(CREDIT_CALCULATOR, ANNUITY) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "", "", false, false, false, "", "",
+            0, 0, 0, 0, 0,
+            true, false,
+            1000000, 12, 8
+    };
+    ModelInfo test_model_info = test_model->slotCreditToModel(test_view_info);
+    ASSERT_NEAR(test_model_info.credit_table[0][1], 86988.43, 1e-2);
+    ASSERT_NEAR(test_model_info.total_interest, 43861.15, 1e-2);
+    ASSERT_NEAR(test_model_info.total_payment, 1043861.16, 1e-2);
+}
+
+TEST(CREDIT_CALCULATOR, DIFFERENTIATED) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "", "", false, false, false, "", "",
+            0, 0, 0, 0, 0,
+            false, true,
+            1000000, 12, 8
+    };
+    ModelInfo test_model_info = test_model->slotCreditToModel(test_view_info);
+    ASSERT_NEAR(test_model_info.credit_table[1][1], 89444.44, 1e-2);
+    ASSERT_NEAR(test_model_info.total_interest, 43333.33, 1e-2);
+    ASSERT_NEAR(test_model_info.total_payment, 1043333.33, 1e-2);
 }

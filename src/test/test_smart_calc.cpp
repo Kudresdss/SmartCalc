@@ -313,6 +313,71 @@ TEST(SMART_CALCULATOR_OPERATIONS, UNARY_OPERATIONS_LN) {
     ASSERT_NEAR(test_model_info.result, 1., 1e-7);
 }
 
+TEST(SMART_CALCULATOR_EQUATIONS, COMPLEX_EQUATION_WITHOUT_X) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "(√(ln(7)*7^(π)))/(atan(π/4))^(sin(45))",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_NEAR(test_model_info.result, 41.9150752, 1e-7);
+}
+
+TEST(SMART_CALCULATOR_EQUATIONS, COMPLEX_EQUATION_WITH_X) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "(√(ln(7)*7^(π)))/(atan(π/4))^(sin(45))/x^(x)",
+            "atan(e)",
+            true,
+            true,
+            true
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_NEAR(test_model_info.result, 32.9537425, 1e-7);
+}
+
+TEST(SMART_CALCULATOR_EQUATIONS, COMPLEX_EQUATION_WITHOUT_X_ALL_FUNCTIONS) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "(ln(7^(6))*log(7))+(sin(π)-cos(π)-asin(1)-acos(1))*(tan(π)/atan(π/4))*√(4mod(2))+(π*e*1.25)",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_NEAR(test_model_info.result, 20.5415769, 1e-7);
+}
+
+TEST(SMART_CALCULATOR_EQUATIONS, COMPLEX_EQUATION_WITH_X_ALL_FUNCTIONS) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "(ln(7^(6))*log(7))+(sin(x)-cos(π)-asin(1)-acos(1))*(tan(x)/atan(π/4))*√(4mod(x))+(π*e*1.25)",
+            "sin(π/4)",
+            true,
+            true,
+            true
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_NEAR(test_model_info.result, 20.6105401, 1e-7);
+}
+
+TEST(SMART_CALCULATOR_EQUATIONS, Y_OUT_OF_BOUNDS) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "x^(x)",
+            "tan(e)",
+            true,
+            true,
+            true
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_EQ(std::to_string(test_model_info.result), std::to_string(std::numeric_limits<double>::quiet_NaN()));
+}
+
 TEST(SMART_CALCULATOR_TOKEN_ERRORS, UNKNOWN_TOKEN) {
     Model* test_model = &Model::getInstance();
     ViewInfo test_view_info = {

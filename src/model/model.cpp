@@ -412,7 +412,7 @@ void Model::handleRuntimeExceptions(const string& exception) {
 
 //CreditCalc:
 
-void Model::slotCreditToModel(const ViewInfo& view_info) {
+ModelInfo Model::slotCreditToModel(const ViewInfo& view_info) {
     ModelInfo model_info;
 
     view_info_ = view_info;
@@ -421,6 +421,7 @@ void Model::slotCreditToModel(const ViewInfo& view_info) {
 
     startCreditCalc();
     emit signalModelToCredit(model_info_);
+    return model_info_;
 }
 
 void Model::startCreditCalc() {

@@ -20,7 +20,7 @@ public:
 
 public slots:
     ModelInfo slotSmartToModel(const ViewInfo& view_info);
-    void slotCreditToModel(const ViewInfo& view_info);
+    ModelInfo slotCreditToModel(const ViewInfo& view_info);
 
 signals:
     void signalModelToSmart(ModelInfo& model_info);
