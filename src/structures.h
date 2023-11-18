@@ -27,6 +27,9 @@ struct ViewInfo {
     bool x_input_exists = false;
     bool x_in_main_input = false;
 
+    std::string old_main_input_str;
+    std::string old_x_input_str;
+
     unsigned int points_density = 1000;
     double x_max = 100;
     double x_min = -100;

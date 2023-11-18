@@ -9,6 +9,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(COVERAGE_COMPILE_FLAGS "--coverage")
+set(COVERAGE_LINKER_FLAGS "--coverage")
+
 set(CMAKE_PREFIX_PATH "/Users/Ivan/Qt/6.4.2/Src/qtbase/lib/cmake")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -25,19 +28,22 @@ set(TEST_DIRS
         test
         )
 
-set(TEST_EXECUTABLE run_test)
+set(TEST_EXECUTABLE tests)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS PrintSupport)
 find_package(GTest REQUIRED)
 
+
 include(FetchContent)
 FetchContent_Declare(
         googletest
         URL https://github.com/google/googletest/archive/f8d7d77c06936315286eb55f8de22cd23c188571.zip
+        DOWNLOAD_NO_EXTRACT TRUE
 )
 FetchContent_MakeAvailable(googletest)
+
 
 foreach(dir ${PROJECT_DIRS})
     file(GLOB CPP_SOURCES "${dir}/*.cpp")
@@ -51,6 +57,12 @@ foreach(dir ${TEST_DIRS})
     file(GLOB HEADER_SOURCES "${dir}/*.h")
     list(APPEND TEST_SOURCES ${CPP_SOURCES} ${HEADER_SOURCES})
 endforeach()
+
+add_custom_target(coverage
+        COMMAND lcov --directory . --capture --output-file coverage.info
+        COMMAND lcov --remove coverage.info '/usr/*' --output-file coverage.info
+        COMMAND lcov --list coverage.info
+        )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
@@ -85,6 +97,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::PrintSuppor
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Gui)
 target_link_libraries(${TEST_EXECUTABLE} PRIVATE ${GTEST_LIBRARIES} pthread)
+
+target_compile_options(${TEST_EXECUTABLE} PRIVATE ${COVERAGE_COMPILE_FLAGS})
+target_link_options(${TEST_EXECUTABLE} PRIVATE ${COVERAGE_LINKER_FLAGS})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

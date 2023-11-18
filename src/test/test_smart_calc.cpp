@@ -65,6 +65,20 @@ TEST(SMART_CALCULATOR_INPUT_TOKENS, CONSTANTS_E) {
     ASSERT_NEAR(test_model_info.result, 2.7182818, 1e-7);
 }
 
+TEST(SMART_CALCULATOR_INPUT_TOKENS, MINOR_INPUT_FEATURES) {
+    Model* test_model = &Model::getInstance();
+    ViewInfo test_view_info = {
+            "(+e)",
+            "",
+            true,
+            false,
+            false
+    };
+    ModelInfo test_model_info = test_model->slotSmartToModel(test_view_info);
+    test_model_info = test_model->slotSmartToModel(test_view_info);
+    ASSERT_NEAR(test_model_info.result, 2.7182818, 1e-7);
+}
+
 TEST(SMART_CALCULATOR_OPERATIONS, BRACKETS) {
     Model* test_model = &Model::getInstance();
     ViewInfo test_view_info = {

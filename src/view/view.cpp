@@ -39,9 +39,10 @@ void View::cleanSmartLabelsAndGraphs() {
 void View::startSmartCalculator_SignalToModel() {
     ViewInfo new_view_info;
 
+    new_view_info.old_main_input_str = view_info_.main_input;
+    new_view_info.old_x_input_str = view_info_.x_input;
     view_info_ = new_view_info;
     ui->statusbar->showMessage("");
-    cleanSmartLabelsAndGraphs();
 
     view_info_.main_input = ui->lineEdit_input->text().toStdString();
     if (!view_info_.main_input.empty()) {
@@ -56,23 +57,41 @@ void View::startSmartCalculator_SignalToModel() {
                                             "recursively out of itself");
             ui->label_x_result->setText("nan");
             error_ = false;
+            cleanSmartLabelsAndGraphs();
             return;
         }
     }
     if (!view_info_.main_input_exists) {
         ui->statusbar->showMessage("Main input is empty");
         error_ = false;
+        cleanSmartLabelsAndGraphs();
         return;
     }
     if (view_info_.x_in_main_input && !view_info_.x_input_exists) {
         ui->statusbar->showMessage("X in main input, but x input is empty");
         error_ = false;
+        cleanSmartLabelsAndGraphs();
         return;
     }
 
+    if (view_info_.main_input == view_info_.old_main_input_str &&
+        view_info_.x_input == view_info_.old_x_input_str)
+        return;
+
+    cleanSmartLabelsAndGraphs();
     setGraphInfo();
     if (!error_)
         emit signalSmartToModel(view_info_);
+    error_ = false;
+}
+
+void View::startSmartCalculator_InputNotChanged_SignalToModel() {
+    ui->statusbar->showMessage("");
+    cleanSmartLabelsAndGraphs();
+    setGraphInfo();
+
+    if (!error_)
+            emit signalSmartToModel(view_info_);
     error_ = false;
 }
 
@@ -336,7 +355,6 @@ void View::connectAll() {
 
     connect(ui->pushButton_equals, SIGNAL(clicked()), this, SLOT(startSmartCalculator_SignalToModel()));
     connect(ui->lineEdit_input, SIGNAL(returnPressed()), this, SLOT(startSmartCalculator_SignalToModel()));
-    connect(ui->pushButton_calculate, SIGNAL(clicked()), this, SLOT(startCreditCalculator_SignalToModel()));
 
     connect(line_edit_filter_, &LineEditClickFilter::signalLineEdit_Input, this, [this]() {line_edit_index_=1;});
     connect(line_edit_filter_, &LineEditClickFilter::signalLineEdit_X, this, [this]() {line_edit_index_=2;});
@@ -344,10 +362,15 @@ void View::connectAll() {
     connect(ui->lineEdit_input, &QLineEdit::textChanged, this, [this]() {line_edit_index_=1;});
     connect(ui->lineEdit_x, &QLineEdit::textChanged, this, [this]() {line_edit_index_=2;});
 
-    connect(ui->verticalSlider_graph, SIGNAL(sliderMoved(int)), this, SLOT(startSmartCalculator_SignalToModel()));
+    connect(ui->verticalSlider_graph, SIGNAL(sliderMoved(int)), this, SLOT(startSmartCalculator_InputNotChanged_SignalToModel()));
+    connect(ui->lineEdit_x_min, SIGNAL(editingFinished()), this, SLOT(startSmartCalculator_InputNotChanged_SignalToModel()));
+    connect(ui->lineEdit_x_max, SIGNAL(editingFinished()), this, SLOT(startSmartCalculator_InputNotChanged_SignalToModel()));
+    connect(ui->lineEdit_y_min, SIGNAL(editingFinished()), this, SLOT(startSmartCalculator_InputNotChanged_SignalToModel()));
+    connect(ui->lineEdit_y_max, SIGNAL(editingFinished()), this, SLOT(startSmartCalculator_InputNotChanged_SignalToModel()));
     connect(ui->horizontalSlider_graph_x, SIGNAL(sliderMoved(int)), this, SLOT(buildGraph()));
     connect(ui->horizontalSlider_graph_y, SIGNAL(sliderMoved(int)), this, SLOT(buildGraph()));
 
+    connect(ui->pushButton_calculate, SIGNAL(clicked()), this, SLOT(startCreditCalculator_SignalToModel()));
     connect(ui->pushButton_notation, SIGNAL(clicked()), this, SLOT(toggleNotationLabel()));
     connect(ui->pushButton_annuity, SIGNAL(clicked()), this, SLOT(toggleAnnuity()));
     connect(ui->pushButton_differentiated, SIGNAL(clicked()), this, SLOT(toggleDifferentiated()));

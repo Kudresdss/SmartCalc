@@ -49,6 +49,7 @@ private slots:
     //SmartCalc:
 
     void startSmartCalculator_SignalToModel();
+    void startSmartCalculator_InputNotChanged_SignalToModel();
     void toggleNotationLabel();
     void printInLineEdit(QAbstractButton *button_pressed);
 

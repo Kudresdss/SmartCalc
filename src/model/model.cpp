@@ -9,10 +9,6 @@ Model& Model::getInstance() {
 
 //SmartCalc:
 
-double Model::getResult() { return result_; }
-
-std::string Model::getStatus() { return output_status_; }
-
 ModelInfo Model::slotSmartToModel(const ViewInfo& view_info) {
     ModelInfo model_info_main_input;
     ModelInfo model_info_x_input;
@@ -48,11 +44,7 @@ void Model::manageInputString() {
         str = view_info_.main_input;
 
     str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
-    if ((old_main_input_str_ != str && !x_string_calculate_) || (old_x_input_str_ != str && x_string_calculate_)) {
-        input_str_ = str;
-        new_input_str_ = true;
-    } else
-        new_input_str_ = false;
+    input_str_ = str;
 }
 
 void Model::startSmartCalc(ModelInfo& model_info) {
@@ -60,17 +52,15 @@ void Model::startSmartCalc(ModelInfo& model_info) {
 
     model_info_ = model_info;
     try {
-        if (new_input_str_) {
-            makeTokens(tokens);
-            checkTokens(tokens);
-            rearrangeIntoPostfixNotation(tokens);
-            if (graph_mode_)
-                calculateGraph(model_info);
-            model_info.result = evaluatePostfixNotation(tokens_);
-            turnTokensToLabel(model_info);
-            result_ = model_info.result;
-            output_status_ = model_info.label_tokens;
-        }
+        makeTokens(tokens);
+        checkTokens(tokens);
+        rearrangeIntoPostfixNotation(tokens);
+        if (graph_mode_)
+            calculateGraph(model_info);
+        model_info.result = evaluatePostfixNotation(tokens_);
+        turnTokensToLabel(model_info);
+        result_ = model_info.result;
+        output_status_ = model_info.label_tokens;
     }
     catch (const std::exception& error) {
         string error_str = "Runtime error: ";

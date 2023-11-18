@@ -15,9 +15,6 @@ class Model : public QObject {
 public:
     static Model& getInstance();
 
-    double getResult();
-    string getStatus();
-
     Model(Model const&) = delete;
     Model& operator=(Model const&) = delete;
 
@@ -72,8 +69,6 @@ private:
     bool   x_string_calculate_ = false;
     double result_ = 0;
     string input_str_;
-    string old_main_input_str_;
-    string old_x_input_str_;
     string output_status_;
     vector_node tokens_ = {};
     vector_node x_tokens_ = {};

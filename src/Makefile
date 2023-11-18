@@ -1,4 +1,5 @@
-APP_NAME = SmartCalculator
+APP_NAME 	= SmartCalculator
+LCOV_FLAGS	= -fprofile-arcs-ftest-coverage -fPIC
 
 all: install tests lcov
 
@@ -11,7 +12,7 @@ uninstall: clean
 
 clean:
 	rm -rf smart_calculator
-	#rm -rf coverage*
+	rm -rf coverage*
 
 dvi:
 	open ../README.md
@@ -23,12 +24,12 @@ launch:
 	./$(APP_NAME)
 
 tests: install
-	make -C smart_calculator run_test
-	./smart_calculator/run_test
+	make -C smart_calculator tests
+	leaks --atExit -q -- ./smart_calculator/tests
 
 lcov: tests
-	make -C build coverage
-	cp build/coverage.info .
+	make -C smart_calculator coverage
+	cp smart_calculator/coverage.info .
 	genhtml coverage.info --output-directory coverage_report
 	open coverage_report/index.html
 
