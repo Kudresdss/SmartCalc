@@ -22,7 +22,7 @@ public:
     Model& operator=(Model const&) = delete;
 
 public slots:
-    void slotSmartToModel(const ViewInfo& view_info);
+    ModelInfo slotSmartToModel(const ViewInfo& view_info);
     void slotCreditToModel(const ViewInfo& view_info);
 
 signals:
@@ -77,8 +77,8 @@ private:
     string output_status_;
     vector_node tokens_ = {};
     vector_node x_tokens_ = {};
-    std::vector<char> functional_tokens_ = {'+', '-', '*', '/', '^', '(', ')', 'e', 'x'};
-    std::vector<string> functions_ = {"π", "ln", "mod", "log", "sin", "cos", "tan", "asin", "acos", "atan", "√"};
+    std::vector<char> functional_tokens_char_ = {'+', '-', '*', '/', '^', '(', ')', 'e', 'x'};
+    std::vector<string> functions_and_pi_string_ = {"π", "ln", "mod", "log", "sin", "cos", "tan", "asin", "acos", "atan", "√"};
     std::vector<string> binary_functions_ = {"+", "-", "*", "/", "^", "mod"};
     std::map<string, int> priority_map_ = {
             {"x", -1},   {"e", -1},  {"π", -1}, {"(", 0},    {")", 0},

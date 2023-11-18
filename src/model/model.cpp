@@ -13,7 +13,7 @@ double Model::getResult() { return result_; }
 
 std::string Model::getStatus() { return output_status_; }
 
-void Model::slotSmartToModel(const ViewInfo& view_info) {
+ModelInfo Model::slotSmartToModel(const ViewInfo& view_info) {
     ModelInfo model_info_main_input;
     ModelInfo model_info_x_input;
 
@@ -36,6 +36,7 @@ void Model::slotSmartToModel(const ViewInfo& view_info) {
     }
     model_info_main_input.label_tokens = "[]: " + model_info_main_input.label_tokens;
     emit signalModelToSmart(model_info_main_input);
+    return model_info_main_input;
 }
 
 void Model::manageInputString() {
@@ -92,7 +93,7 @@ void Model::makeTokens(vector_node& tokens) {
             tokens.push_back(current_token);
         } else {
             if (!current_token.name.empty()) cleanToken(current_token);
-            if (std::any_of(functional_tokens_.begin(), functional_tokens_.end(),
+            if (std::any_of(functional_tokens_char_.begin(), functional_tokens_char_.end(),
                             [c](char func_token){return func_token == c;}))
                 buildTokens(tokens, current_token, string(1, c), i);
             else makeFunctionTokens(tokens, current_token, str, i);
@@ -106,7 +107,7 @@ void Model::makeFunctionTokens(vector_node& tokens, Node& current_token, const s
     size_t size_str = token_str.size();
     bool error = true;
 
-    for (string& func_iter : functions_) {
+    for (string& func_iter : functions_and_pi_string_) {
         if (i < size_str - (func_iter.size() -1) && token_str.substr(i, func_iter.size()) == func_iter) {
             buildTokens(tokens, current_token, func_iter, i);
             error = false;
@@ -146,7 +147,7 @@ bool Model::checkNormalizedNum(const string& str, size_t &index) noexcept {
 
 void Model::givePriorityAndValue(Node& token) {
     if (token.priority == -1) {
-        checkMultipleDots(token.name); //добавить обработку строки х
+        checkMultipleDots(token.name);
         token.value = std::stod(token.name);
     } else {
         token.priority = priority_map_[token.name];
@@ -161,7 +162,7 @@ void Model::checkMultipleDots(const string& token_name) {
     for (const char& token_iter : token_name) {
         if (token_iter == '.') ++dot_count;
     }
-    if (dot_count > 1) handleRuntimeExceptions("invalid expression: a number contains more than one dot");
+    if (dot_count > 1) handleRuntimeExceptions("invalid expression: number contains more than one dot");
 }
 
 void Model::cleanToken(Node& token) noexcept {
@@ -191,8 +192,6 @@ void Model::checkTokens(vector_node& tokens) {
         return false;
     };
 
-    if (tokens.empty())
-        handleRuntimeExceptions("can't convert input into tokens");
     if (tokens.size() > 1 && tokens[0].name == "+") tokens.erase(tokens.begin());
     if (tokens[0].name == "-") {
         tokens[0] = minus_one;
@@ -209,8 +208,6 @@ void Model::checkTokens(vector_node& tokens) {
         handleRuntimeExceptions("incorrect usage of functions: binary function in the beginning of expression");
     if (tokens[last_elem].name == "(")
         handleRuntimeExceptions("incorrect usage of brackets: opening bracket in the end of expression");
-    else if (checkTokenIdentity(tokens[last_elem]) == "unary function")
-        handleRuntimeExceptions("incorrect usage of functions: unary function in the end of expression");
     else if (checkTokenIdentity(tokens[last_elem]) == "binary function")
         handleRuntimeExceptions("incorrect usage of functions: binary function in the end of expression");
 }

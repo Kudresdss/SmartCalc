@@ -85,10 +85,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::PrintSuppor
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Gui)
 target_link_libraries(${TEST_EXECUTABLE} PRIVATE ${GTEST_LIBRARIES} pthread)
-#target_link_libraries(${TEST_EXECUTABLE} gtest)
-
-#include(GoogleTest)
-#gtest_discover_tests(test)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -105,5 +101,4 @@ install(TARGETS ${PROJECT_NAME}
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(${PROJECT_NAME})
     qt_finalize_executable(${TEST_EXECUTABLE})
-
 endif()

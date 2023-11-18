@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR=""
-echo "Введите директорию для установки приложения (для установки в текущую директорию нажмите enter)"
+echo "Please enter the installation directory path (press [return] to choose current directory)"
 read DIR
 
 if [ "$DIR" == "" ]; then

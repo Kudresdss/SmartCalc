@@ -263,7 +263,7 @@ void View::startCreditCalculator_SignalToModel() {
     }
     else {
         view_info_.interest_rate = ui->lineEdit_interest_rate->text().toUInt(&no_error_);
-        if (!no_error_ || view_info_.interest_rate > 100) {
+        if (!no_error_ || (view_info_.interest_rate <= 0 || view_info_.interest_rate > 100)) {
             ui->statusbar->showMessage("Incorrect interest rate value");
             return;
         }

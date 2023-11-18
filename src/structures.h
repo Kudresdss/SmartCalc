@@ -15,8 +15,6 @@ struct Node {
 
     int priority = 0;
     double value = 0;
-
-    // CreditCalc
 };
 
 struct ViewInfo {
@@ -51,13 +49,15 @@ struct ModelInfo {
     std::string label_tokens;
     std::string x_label_tokens;
     std::string error;
-    std::vector<std::vector<double>> x_coord = {};
-    std::vector<std::vector<double>> y_coord = {};
 
     bool graph_mode = false;
+
     double result = 0;
-    double x_input_value;
+    double x_input_value = 0;
     double y_result = 0;
+
+    std::vector<std::vector<double>> x_coord = {};
+    std::vector<std::vector<double>> y_coord = {};
 
     // CreditCalc
 
