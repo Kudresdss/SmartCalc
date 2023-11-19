@@ -59,14 +59,14 @@ struct ModelInfo {
     double x_input_value = 0;
     double y_result = 0;
 
-    std::vector<std::vector<double>> x_coord = {};
-    std::vector<std::vector<double>> y_coord = {};
+    std::vector<std::vector<double>> x_coord;
+    std::vector<std::vector<double>> y_coord;
 
     // CreditCalc
 
     long double total_interest = 0;
     long double total_payment = 0;
-    std::vector<std::vector<long double>> credit_table = {};
+    std::vector<std::vector<long double>> credit_table;
 };
 
 #endif //SMARTCALC1_STRUCTURES_H

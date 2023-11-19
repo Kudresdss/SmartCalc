@@ -1,4 +1,5 @@
 APP_NAME 	= SmartCalculator
+TESTS_NAME  = tests
 LCOV_FLAGS	= -fprofile-arcs-ftest-coverage -fPIC
 
 all: install tests lcov
@@ -13,6 +14,7 @@ uninstall: clean
 clean:
 	rm -rf smart_calculator
 	rm -rf coverage*
+	rm $(TESTS_NAME)
 
 dvi:
 	open ../README.md
@@ -25,16 +27,18 @@ launch:
 
 tests: install
 	make -C smart_calculator tests
-	leaks --atExit -q -- ./smart_calculator/tests
+	cp smart_calculator/tests tests
+	leaks --atExit -q -- ./tests
 #	rm smart_calculator/CMakeFiles/tests.dir/test/*.gcda
 #	rm smart_calculator/CMakeFiles/tests.dir/model/*.gcda
 #	rm smart_calculator/CMakeFiles/tests.dir/tests_autogen/*.gcda
 
 lcov: tests
-	make -C smart_calculator coverage
-	cp smart_calculator/coverage.info .
-	genhtml coverage.info --output-directory coverage_report
+	lcov -t "tests" -o gcov.info --no-external -c -d .
+	lcov --remove gcov.info '*/smart_calculator/tests_autogen/*' --output-file gcov.info
+	genhtml -o coverage_report gcov.info
 	open coverage_report/index.html
+	rm gcov.info
 
 #clang:
 #	clang-format --style=google -n controller/*

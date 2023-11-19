@@ -14,7 +14,7 @@
 #include <QRect>
 #include <QRegion>
 #include <QStandardItemModel>
-#include "LineEditClickFilter.h"
+#include "line_edit_click_filter.h"
 #include "../structures.h"
 
 
@@ -31,15 +31,15 @@ public:
     explicit View(QWidget *parent = nullptr);
     ~View();
 
-    void setTheme();
+    void SetTheme();
 
 public slots:
-    void slotModelToSmart(ModelInfo& model_info);
-    void slotModelToCredit(ModelInfo& model_info);
+    void SlotModelToSmart(ModelInfo& model_info);
+    void SlotModelToCredit(ModelInfo& model_info);
 
     //SmartCalc:
 
-    void buildGraph();
+    void BuildGraph();
 
 private slots:
     void on_actionOpen_project_triggered();
@@ -48,36 +48,36 @@ private slots:
 
     //SmartCalc:
 
-    void startSmartCalculator_SignalToModel();
-    void startSmartCalculator_InputNotChanged_SignalToModel();
-    void toggleNotationLabel();
-    void printInLineEdit(QAbstractButton *button_pressed);
+    void StartSmartCalculator_SignalToModel();
+    void StartSmartCalculator_InputNotChanged_SignalToModel();
+    void ToggleNotationLabel();
+    void PrintInLineEdit(QAbstractButton *button_pressed);
 
     //CreditCalc:
 
-    void startCreditCalculator_SignalToModel();
-    void toggleAnnuity();
-    void toggleDifferentiated();
+    void StartCreditCalculator_SignalToModel();
+    void ToggleAnnuity();
+    void ToggleDifferentiated();
 
 
 signals:
-    void signalSmartToModel(ViewInfo& view_info);
-    void signalCreditToModel(ViewInfo& view_info_);
+    void SignalSmartToModel(ViewInfo& view_info);
+    void SignalCreditToModel(ViewInfo& view_info_);
 
 
 private:
-    void connectAll();
+    void ConnectAll();
 
     //SmartCalc:
 
-    void startSmartCalculator_SignalFromModel();
-    void setGraphInfo();
-    void cleanSmartLabelsAndGraphs();
+    void StartSmartCalculator_SignalFromModel();
+    void SetGraphInfo();
+    void CleanSmartLabelsAndGraphs();
 
     //CreditCalc:
 
-    void startCreditCalculator_SignalFromModel();
-    void buildCreditTable();
+    void StartCreditCalculator_SignalFromModel();
+    void BuildCreditTable();
 
 private:
     Ui::View *ui;
@@ -86,8 +86,8 @@ private:
 
     //SmartCalc:
 
-    LineEditClickFilter *line_edit_filter_;
     QPen    graph_pen_;
+    LineEditClickFilter *line_edit_filter_;
     bool error_ = false;
     bool toggle_notation_ = false;
     size_t line_edit_index_ = 0;

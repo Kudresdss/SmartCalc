@@ -46,23 +46,19 @@ FetchContent_MakeAvailable(googletest)
 
 
 foreach(dir ${PROJECT_DIRS})
+    file(GLOB CC_SOURCES "${dir}/*.cc")
     file(GLOB CPP_SOURCES "${dir}/*.cpp")
     file(GLOB HEADER_SOURCES "${dir}/*.h")
     file(GLOB UI_SOURCES "${dir}/*.ui")
-    list(APPEND PROJECT_SOURCES ${CPP_SOURCES} ${HEADER_SOURCES} ${UI_SOURCES})
+    list(APPEND PROJECT_SOURCES ${CC_SOURCES} ${CPP_SOURCES} ${HEADER_SOURCES} ${UI_SOURCES})
 endforeach()
 
 foreach(dir ${TEST_DIRS})
+    file(GLOB CC_SOURCES "${dir}/*.cc")
     file(GLOB CPP_SOURCES "${dir}/*.cpp")
     file(GLOB HEADER_SOURCES "${dir}/*.h")
-    list(APPEND TEST_SOURCES ${CPP_SOURCES} ${HEADER_SOURCES})
+    list(APPEND TEST_SOURCES ${CC_SOURCES} ${CPP_SOURCES} ${HEADER_SOURCES})
 endforeach()
-
-add_custom_target(coverage
-        COMMAND lcov --directory . --capture --output-file coverage.info
-        COMMAND lcov --remove coverage.info '/usr/*' --output-file coverage.info
-        COMMAND lcov --list coverage.info
-        )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
@@ -72,7 +68,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     )
     qt_add_executable(${TEST_EXECUTABLE}
         MANUAL_FINALIZATION
-        model/model.cpp
+            model/model.cc
         model/model.h
         ${TEST_SOURCES}
     )
