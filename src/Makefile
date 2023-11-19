@@ -1,6 +1,5 @@
 APP_NAME 	= SmartCalculator
 TESTS_NAME  = tests
-LCOV_FLAGS	= -fprofile-arcs-ftest-coverage -fPIC
 
 all: install tests lcov
 
@@ -29,9 +28,6 @@ tests: install
 	make -C smart_calculator tests
 	cp smart_calculator/tests tests
 	leaks --atExit -q -- ./tests
-#	rm smart_calculator/CMakeFiles/tests.dir/test/*.gcda
-#	rm smart_calculator/CMakeFiles/tests.dir/model/*.gcda
-#	rm smart_calculator/CMakeFiles/tests.dir/tests_autogen/*.gcda
 
 lcov: tests
 	lcov -t "tests" -o gcov.info --no-external -c -d .

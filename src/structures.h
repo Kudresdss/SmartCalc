@@ -11,6 +11,7 @@
 
 struct Node {
     // SmartCalc
+
     std::string  name;
 
     int priority = 0;

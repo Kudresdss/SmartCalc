@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(COVERAGE_COMPILE_FLAGS "--coverage")
 set(COVERAGE_LINKER_FLAGS "--coverage")
 
+set(CMAKE_PREFIX_PATH "$ENV{QTDIR}/cmake")
 set(CMAKE_PREFIX_PATH "/Users/Ivan/Qt/6.4.2/Src/qtbase/lib/cmake")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
