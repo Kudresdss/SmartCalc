@@ -36,12 +36,11 @@ lcov: tests
 	open coverage_report/index.html
 	rm gcov.info
 
-#clang:
-#	clang-format --style=google -n controller/*
-#	clang-format --style=google -n model/*
-#	clang-format --style=google -n mvc_model/*
-#	clang-format --style=google -n view/*.cc view/*.h
-#	clang-format --style=google -n structures.h main.cc
-#	clang-format --style=google -n test/*
+clang:
+	clang-format --style=google -n controller/*
+	clang-format --style=google -n model/*
+	clang-format --style=google -n view/*.cc view/*.h
+	clang-format --style=google -n structures.h main.cc
+	clang-format --style=google -n test/*
 
 .PHONY: all install uninstall clean dvi dist launch tests lcov clang
