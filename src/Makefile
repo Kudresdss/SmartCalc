@@ -9,11 +9,11 @@ install:
 uninstall: clean
 	rm -rf $(APP_NAME)
 	rm -rf $(APP_NAME).tar.gz
+	rm $(TESTS_NAME)
 
 clean:
 	rm -rf smart_calculator
 	rm -rf coverage*
-	rm $(TESTS_NAME)
 
 dvi:
 	open ../README.md
