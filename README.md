@@ -7,4 +7,4 @@ Smart Calculator in C++ with QT GUI.
 
 ![image](https://github.com/user-attachments/assets/f9291a0e-2346-4bce-bd69-ee335127e13c)
 
-Compile using QMAKE in QTCreator.
+Compile using ```cmake``` command in project directory.
